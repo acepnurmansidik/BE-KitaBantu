@@ -164,4 +164,13 @@ globalFunc.QuerySearch = async (payload) => {
   return result;
 };
 
+globalFunc.GenerateSlug = (title) => {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9 -]/g, "") // Menghapus karakter non-alfanumerik kecuali spasi dan tanda penghubung
+    .replace(/\s+/g, "-") // Menggantikan spasi dengan tanda penghubung
+    .replace(/-+/g, "-") // Menggabungkan beberapa tanda penghubung menjadi satu
+    .trim("-"); // Menghapus tanda penghubung di awal dan akhir
+};
+
 module.exports = { globalFunc, verifyJwtToken };

@@ -74,6 +74,92 @@
           }
         }
       }
+    },
+    "/category/": {
+      "get": {
+        "tags": [
+          "Setting Category"
+        ],
+        "summary": "filter every campaign",
+        "description": "this for filter campaign using category fundraising",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Setting Category"
+        ],
+        "summary": "filter every campaign",
+        "description": "this for filter campaign using category fundraising",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Create role",
+            "schema": {
+              "$ref": "#/definitions/BodyCategorySchema"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/category/{id}": {
+      "put": {
+        "tags": [
+          "Setting Category"
+        ],
+        "summary": "filter every campaign",
+        "description": "this for filter campaign using category fundraising",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Create role",
+            "schema": {
+              "$ref": "#/definitions/BodyCategorySchema"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Setting Category"
+        ],
+        "summary": "filter every campaign",
+        "description": "this for filter campaign using category fundraising",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -97,6 +183,26 @@
           "type": "string",
           "example": "example@gmail.com"
         }
+      }
+    },
+    "BodyCategorySchema": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "example secret"
+        },
+        "icon": {}
+      }
+    },
+    "QueryCategorySchema": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "example secret"
+        },
+        "icon": {}
       }
     },
     "NotFound": {
