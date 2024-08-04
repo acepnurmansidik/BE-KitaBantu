@@ -1,5 +1,5 @@
 const { verifyJwtToken } = require("../helper/global-func");
-const { UserModel } = require("../models/user");
+const { AuthUserModel } = require("../models/auth");
 const { UnauthenticatedError } = require("../utils/errors");
 const NotFound = require("../utils/errors/not-found");
 
@@ -18,7 +18,7 @@ const AuthorizeUserLogin = async (req, res, next) => {
     const dataValid = await verifyJwtToken(authHeader, next);
 
     // check email is register on database
-    const verifyData = await UserModel.findOne({
+    const verifyData = await AuthUserModel.findOne({
       where: { email: dataValid.email },
     });
 

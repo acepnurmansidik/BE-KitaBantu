@@ -1,5 +1,5 @@
-const UserSchema = require("./user");
+const AuthUserSchema = require("./auth");
 
-const GlobalSchema = { ...UserSchema };
+const GlobalSchema = { ...AuthUserSchema };
 
 module.exports = GlobalSchema;

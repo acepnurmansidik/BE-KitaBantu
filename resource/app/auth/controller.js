@@ -1,7 +1,7 @@
 const { globalFunc } = require("../../helper/global-func");
-const { UserModel } = require("../../models/user");
+const { AuthUserModel } = require("../../models/auth");
 const bcrypt = require("bcrypt");
-const { BadRequestError } = require("../../utils/errors/index");
+const { BadRequestError, NotFoundError } = require("../../utils/errors/index");
 const { StatusCodes } = require("http-status-codes");
 const response = require("../../utils/response");
 const { methodConstant } = require("../../utils/constanta");
@@ -20,13 +20,18 @@ controller.Register = async (req, res, next) => {
     #swagger.parameters['obj'] = {
       in: 'body',
       description: 'Create role',
-      schema: { $ref: '#/definitions/BodyUserSchema' }
+      schema: { $ref: '#/definitions/BodyAuthUserSchema' }
     }
   */
   try {
     const payload = req.body;
     payload.password = await globalFunc.hashPassword({ ...payload });
-    const result = await UserModel.create(payload);
+
+    let result = await AuthUserModel.findOne({ email: payload.email });
+    if (result) throw new NotFoundError("Data has register");
+
+    result = await AuthUserModel.create(payload);
+    delete payload.password;
     return res.status(200).json({ status: 200, result });
   } catch (err) {
     next(err);
@@ -41,7 +46,7 @@ controller.Login = async (req, res, next) => {
     #swagger.parameters['obj'] = {
       in: 'body',
       description: 'Create role',
-      schema: { $ref: '#/definitions/BodyUserSchema' }
+      schema: { $ref: '#/definitions/BodyAuthUserSchema' }
     }
   */
   try {
@@ -50,7 +55,7 @@ controller.Login = async (req, res, next) => {
     if (!email || !password)
       throw new BadRequestError("Credentials is invalid");
     // get data from databse by email
-    const data = await UserModel.findOne({
+    const data = await AuthUserModel.findOne({
       where: { email },
       attributes: ["password", "email"],
     });

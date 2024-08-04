@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const DBConn = require("../../db");
 
-const UserModelDefine = {
+const AuthUserModelDefine = {
   email: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -16,9 +16,14 @@ const UserModelDefine = {
     allowNull: false,
     defaultValue: "example secret",
   },
+  activation: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
 };
 
-const UserModel = DBConn.define("user", UserModelDefine, {
+const AuthUserModel = DBConn.define("auth_users", AuthUserModelDefine, {
   timestamps: true,
   schema: "setting",
   force: false,
@@ -27,10 +32,11 @@ const UserModel = DBConn.define("user", UserModelDefine, {
   paranoid: true,
 });
 
-Object.keys(UserModelDefine).map((item) => {
-  UserModelDefine[item] = UserModelDefine[item]["defaultValue"]
-    ? UserModelDefine[item]["defaultValue"]
+Object.keys(AuthUserModelDefine).map((item) => {
+  console.log(item);
+  AuthUserModelDefine[item] = AuthUserModelDefine[item]["defaultValue"]
+    ? AuthUserModelDefine[item]["defaultValue"]
     : null;
 });
 
-module.exports = { UserModelDefine, UserModel };
+module.exports = { AuthUserModelDefine, AuthUserModel };
