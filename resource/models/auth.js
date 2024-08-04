@@ -39,4 +39,5 @@ Object.keys(AuthUserModelDefine).map((item) => {
     : null;
 });
 
+delete AuthUserModelDefine.activation;
 module.exports = { AuthUserModelDefine, AuthUserModel };
