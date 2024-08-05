@@ -48,14 +48,23 @@ const AuthUserModel = DBConn.define("auth_users", AuthUserModelDefine, {
   createdAt: true,
   updatedAt: true,
   paranoid: true,
+  indexes: [
+    {
+      unique: true,
+      fields: ["role_id"],
+    },
+  ],
 });
 
+AuthUserModel.belongsTo(RolesModel, { foreignKey: "role_id" });
+RolesModel.hasMany(AuthUserModel, { foreignKey: "role_id" });
+
 Object.keys(AuthUserModelDefine).map((item) => {
-  console.log(item);
   AuthUserModelDefine[item] = AuthUserModelDefine[item]["defaultValue"]
     ? AuthUserModelDefine[item]["defaultValue"]
     : null;
 });
 
 delete AuthUserModelDefine.activation;
+delete AuthUserModelDefine.role_id;
 module.exports = { AuthUserModelDefine, AuthUserModel };

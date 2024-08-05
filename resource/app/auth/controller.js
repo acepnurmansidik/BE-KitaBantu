@@ -4,6 +4,10 @@ const bcrypt = require("bcrypt");
 const { BadRequestError, NotFoundError } = require("../../utils/errors/index");
 const response = require("../../utils/response");
 const { methodConstant } = require("../../utils/constanta");
+const { OrganizerModel } = require("../../models/organizer");
+const { RolesModel } = require("../../models/roles");
+const { Op, Sequelize } = require("sequelize");
+const DBConn = require("../../../db");
 
 const controller = {};
 controller.Register = async (req, res, next) => {
@@ -24,6 +28,10 @@ controller.Register = async (req, res, next) => {
     let result = await AuthUserModel.findOne({ email: payload.email });
     if (result) throw new NotFoundError("Data has register");
 
+    const role = await RolesModel.findOne({
+      where: { role_name: { [Op.iLike]: "%guest%" } },
+    });
+    payload.role_id = role.id;
     result = await AuthUserModel.create(payload);
 
     delete payload.password;
@@ -41,7 +49,7 @@ controller.Login = async (req, res, next) => {
     #swagger.parameters['obj'] = {
       in: 'body',
       description: 'Create role',
-      schema: { $ref: '#/definitions/BodyAuthUserSchema' }
+      schema: { $ref: '#/definitions/BodyAuthSigninSchema' }
     }
   */
   try {
@@ -52,7 +60,7 @@ controller.Login = async (req, res, next) => {
     // get data from databse by email
     const data = await AuthUserModel.findOne({
       where: { email },
-      attributes: ["password", "email"],
+      attributes: ["email", "password"],
     });
 
     // compare password from input with saving database
@@ -68,6 +76,89 @@ controller.Login = async (req, res, next) => {
 
     response.MethodResponse(res, methodConstant.GET, result);
   } catch (err) {
+    next(err);
+  }
+};
+
+controller.Organizer = async (req, res, next) => {
+  try {
+    /*
+      #swagger.security = [{
+        "bearerAuth": []
+      }]
+    */
+    /* 
+    #swagger.tags = ['Master Role']
+    #swagger.summary = 'role user'
+    #swagger.description = 'every user has role for access'
+    #swagger.parameters['obj'] = {
+      in: 'body',
+      description: 'Create role',
+      schema: { $ref: '#/definitions/BodyOrganizerSchema' }
+    }
+  */
+
+    const payload = req.body;
+
+    payload.auth_id = req.login.id;
+
+    const [result, duplicate] = await OrganizerModel.upsert(payload);
+
+    return res.status(200).json({ status: 200, result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+controller.verifyOrganizer = async (req, res, next) => {
+  const transaction = await DBConn.transaction();
+  try {
+    /*
+      #swagger.security = [{
+        "bearerAuth": []
+      }]
+    */
+    /* 
+    #swagger.tags = ['Master Role']
+    #swagger.summary = 'role user'
+    #swagger.description = 'every user has role for access'
+  */
+    const { id } = req.params;
+
+    const [user, role] = await Promise.all([
+      OrganizerModel.findOne({
+        where: { id },
+        include: {
+          model: AuthUserModel,
+        },
+      }),
+      RolesModel.findOne({
+        where: { role_name: { [Op.iLike]: "%organizer%" } },
+      }),
+    ]);
+
+    await Promise.all([
+      OrganizerModel.update(
+        { verified: true },
+        { where: { id } },
+        { transaction },
+      ),
+      AuthUserModel.update(
+        { role_id: role.id },
+        { where: { id: user.auth_user.id } },
+        { transaction },
+      ),
+    ]);
+
+    await transaction.commit();
+
+    return res.status(200).json({
+      status: 200,
+      message: "Organizer has been verified",
+      data: null,
+    });
+  } catch (err) {
+    await transaction.rollback();
     next(err);
   }
 };

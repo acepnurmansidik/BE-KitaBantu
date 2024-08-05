@@ -1,6 +1,5 @@
 const express = require("express");
 const controller = require("./controller");
-const { AuthorizeUserLogin } = require("../../middleware/authentication");
 const router = express.Router();
 
 /**
@@ -10,9 +9,9 @@ const router = express.Router();
  * @returns {Array.<User>} 200 - An array of users
  * @returns {Error} 500 - Internal server error
  */
-router.post("/singup", controller.Register);
-router.post("/signin", controller.Login);
-router.post("/submision", AuthorizeUserLogin, controller.Organizer);
-router.put("/verify/:id", controller.verifyOrganizer);
+router.get("/", controller.index);
+router.post("/", controller.create);
+router.put("/:id", controller.update);
+router.delete("/:id", controller.destroy);
 
 module.exports = router;
