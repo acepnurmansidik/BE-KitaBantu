@@ -1,6 +1,5 @@
 const { DataTypes } = require("sequelize");
 const DBConn = require("../../db");
-const { AuthUserModel } = require("./auth");
 
 const RolesModelDefine = {
   role_name: {

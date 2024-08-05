@@ -1,5 +1,6 @@
 const { verifyJwtToken } = require("../helper/global-func");
 const { AuthUserModel } = require("../models/auth");
+const { OrganizerModel } = require("../models/organizer");
 const { RolesModel } = require("../models/roles");
 const { UnauthenticatedError } = require("../utils/errors");
 const NotFound = require("../utils/errors/not-found");
@@ -18,15 +19,24 @@ const AuthorizeUserLogin = async (req, res, next) => {
     // verify JWT token
     const dataValid = await verifyJwtToken(authHeader, next);
 
-    // check email is register on database
-    const verifyData = await AuthUserModel.findOne({
-      where: { email: dataValid.email },
-      attributes: ["id", "username"],
-      include: {
-        model: RolesModel,
-        attributes: ["role_name"],
-      },
-    });
+    // check email is register on database and organizer
+    const [verifyData, dataOrganizer] = await Promise.all([
+      await AuthUserModel.findOne({
+        where: { email: dataValid.email },
+        attributes: ["id", "username"],
+        include: {
+          model: RolesModel,
+          attributes: ["role_name"],
+        },
+      }),
+      await OrganizerModel.findOne({
+        include: {
+          model: AuthUserModel,
+          where: { email: dataValid.email },
+        },
+      }),
+    ]);
+    // const dataOrganizer = await OrganizerModel.findOne({ id: verifyData.id });
 
     // send error not found, if data not register
     if (!verifyData) throw new NotFound("Data not register!");
@@ -37,10 +47,12 @@ const AuthorizeUserLogin = async (req, res, next) => {
     delete dataValid.jti;
 
     req.login = {
-      id: verifyData.id,
+      user_id: verifyData.id,
+      organizer_id: !dataOrganizer ? null : dataOrganizer.id,
       ...dataValid,
       ...verifyData.role.toJSON(),
     };
+
     // next to controller
     next();
   } catch (err) {

@@ -138,6 +138,13 @@
         ],
         "summary": "filter every campaign",
         "description": "this for filter campaign using category fundraising",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -156,6 +163,11 @@
         "summary": "filter every campaign",
         "description": "this for filter campaign using category fundraising",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
           {
             "name": "obj",
             "in": "body",
@@ -192,6 +204,11 @@
             "type": "string"
           },
           {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
             "name": "obj",
             "in": "body",
             "description": "Create role",
@@ -223,6 +240,11 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
@@ -244,6 +266,13 @@
         ],
         "summary": "filter every campaign",
         "description": "this for filter campaign using category fundraising",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -257,6 +286,11 @@
         "summary": "filter every campaign",
         "description": "this for filter campaign using category fundraising",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
           {
             "name": "obj",
             "in": "body",
@@ -293,6 +327,11 @@
             "type": "string"
           },
           {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
             "name": "obj",
             "in": "body",
             "description": "Create role",
@@ -324,6 +363,11 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
@@ -345,6 +389,13 @@
         ],
         "summary": "filter every campaign",
         "description": "this for filter campaign using category fundraising",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -363,6 +414,11 @@
         "summary": "filter every campaign",
         "description": "this for filter campaign using category fundraising",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
           {
             "name": "obj",
             "in": "body",
@@ -399,6 +455,11 @@
             "type": "string"
           },
           {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
             "name": "obj",
             "in": "body",
             "description": "Create role",
@@ -429,6 +490,173 @@
             "name": "id",
             "in": "path",
             "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/campaign/": {
+      "get": {
+        "tags": [
+          "CAMPAIGN"
+        ],
+        "summary": "filter every campaign",
+        "description": "this for filter campaign using category fundraising",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "CAMPAIGN"
+        ],
+        "summary": "filter every campaign",
+        "description": "this for filter campaign using category fundraising",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Create role",
+            "schema": {
+              "$ref": "#/definitions/BodyCampaignSchema"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/campaign/donate": {
+      "post": {
+        "tags": [
+          "CAMPAIGN"
+        ],
+        "summary": "filter every campaign",
+        "description": "this for filter campaign using category fundraising",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Create role",
+            "schema": {
+              "$ref": "#/definitions/BodyDonateCampaignSchema"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/campaign/{id}": {
+      "put": {
+        "tags": [
+          "CAMPAIGN"
+        ],
+        "summary": "filter every campaign",
+        "description": "this for filter campaign using category fundraising",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Create role",
+            "schema": {
+              "$ref": "#/definitions/BodyCampaignSchema"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "CAMPAIGN"
+        ],
+        "summary": "filter every campaign",
+        "description": "this for filter campaign using category fundraising",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
             "type": "string"
           }
         ],
@@ -544,6 +772,56 @@
         "email": {
           "type": "string",
           "example": "adminbank@gmail.com"
+        }
+      }
+    },
+    "BodyCampaignSchema": {
+      "type": "object",
+      "properties": {
+        "campaign_name": {
+          "type": "string",
+          "example": "peduli lingkunagan yang bersih"
+        },
+        "amount_require": {},
+        "description": {
+          "type": "string",
+          "example": "lingkunngan hidup yang sehat diperlukan untuk keberlangsungan hidup makhluk hidup"
+        },
+        "start_date": {},
+        "end_date": {},
+        "category_id": {}
+      }
+    },
+    "BodyDonateCampaignSchema": {
+      "type": "object",
+      "properties": {
+        "campaign_name": {
+          "type": "string",
+          "example": "peduli lingkunagan yang bersih"
+        },
+        "slug_name": {
+          "type": "string",
+          "example": "peduli lingkunagan yang bersih"
+        },
+        "amount": {},
+        "nominal": {},
+        "description": {
+          "type": "string",
+          "example": "lingkunngan hidup yang sehat diperlukan untuk keberlangsungan hidup makhluk hidup"
+        },
+        "organizer_id": {},
+        "campaign_id": {},
+        "bank_name": {
+          "type": "string",
+          "example": "example secret"
+        },
+        "account_name": {
+          "type": "string",
+          "example": "example name"
+        },
+        "account_number": {
+          "type": "string",
+          "example": "1773472375472"
         }
       }
     },

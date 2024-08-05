@@ -1,12 +1,11 @@
 const { globalFunc } = require("../../helper/global-func");
 const { AuthUserModel } = require("../../models/auth");
-const bcrypt = require("bcrypt");
 const { BadRequestError, NotFoundError } = require("../../utils/errors/index");
 const response = require("../../utils/response");
 const { methodConstant } = require("../../utils/constanta");
 const { OrganizerModel } = require("../../models/organizer");
 const { RolesModel } = require("../../models/roles");
-const { Op, Sequelize } = require("sequelize");
+const { Op } = require("sequelize");
 const DBConn = require("../../../db");
 
 const controller = {};
@@ -25,12 +24,17 @@ controller.Register = async (req, res, next) => {
     const payload = req.body;
     payload.password = await globalFunc.hashPassword({ ...payload });
 
-    let result = await AuthUserModel.findOne({ email: payload.email });
-    if (result) throw new NotFoundError("Data has register");
+    let [result, role] = await Promise.all([
+      AuthUserModel.findOne({
+        where: { email: payload.email },
+      }),
+      RolesModel.findOne({
+        where: { role_name: { [Op.iLike]: "%guest%" } },
+      }),
+    ]);
 
-    const role = await RolesModel.findOne({
-      where: { role_name: { [Op.iLike]: "%guest%" } },
-    });
+    if (result) throw new BadRequestError("Account has register");
+
     payload.role_id = role.id;
     result = await AuthUserModel.create(payload);
 
@@ -62,6 +66,8 @@ controller.Login = async (req, res, next) => {
       where: { email },
       attributes: ["email", "password"],
     });
+
+    if (!data) throw new NotFoundError("Account not register");
 
     // compare password from input with saving database
     const isMatch = await globalFunc.verifyPassword({
