@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const DBConn = require("../../db");
+const { RolesModel } = require("./roles");
 
 const AuthUserModelDefine = {
   email: {
@@ -16,16 +17,33 @@ const AuthUserModelDefine = {
     allowNull: false,
     defaultValue: "example secret",
   },
+  username: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: "example secret",
+  },
+  phone_number: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: "example secret",
+  },
   activation: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
     defaultValue: false,
   },
+  role_id: {
+    type: DataTypes.UUID,
+    allowNull: false,
+    references: {
+      model: RolesModel,
+      key: "id",
+    },
+  },
 };
 
 const AuthUserModel = DBConn.define("auth_users", AuthUserModelDefine, {
   timestamps: true,
-  schema: "setting",
   force: false,
   createdAt: true,
   updatedAt: true,

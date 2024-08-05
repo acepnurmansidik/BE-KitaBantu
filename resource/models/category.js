@@ -13,15 +13,10 @@ const CategoryModelDefine = {
     allowNull: false,
     defaultValue: "example-secret",
   },
-  icon: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
 };
 
-const CategoryModel = DBConn.define("sys_categories", CategoryModelDefine, {
+const CategoryModel = DBConn.define("categories", CategoryModelDefine, {
   timestamps: true,
-  schema: "setting",
   force: false,
   createdAt: true,
   updatedAt: true,

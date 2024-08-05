@@ -173,4 +173,8 @@ globalFunc.GenerateSlug = (title) => {
     .trim("-"); // Menghapus tanda penghubung di awal dan akhir
 };
 
+globalFunc.titleCase = (title) => {
+  return title.replace(/\b[a-z]/g, (char) => char.toUpperCase());
+};
+
 module.exports = { globalFunc, verifyJwtToken };

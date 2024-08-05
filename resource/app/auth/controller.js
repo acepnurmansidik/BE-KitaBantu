@@ -2,17 +2,11 @@ const { globalFunc } = require("../../helper/global-func");
 const { AuthUserModel } = require("../../models/auth");
 const bcrypt = require("bcrypt");
 const { BadRequestError, NotFoundError } = require("../../utils/errors/index");
-const { StatusCodes } = require("http-status-codes");
 const response = require("../../utils/response");
 const { methodConstant } = require("../../utils/constanta");
 
 const controller = {};
 controller.Register = async (req, res, next) => {
-  /* 
-    #swagger.security = [{
-      "bearerAuth": []
-    }] 
-  */
   /* 
     #swagger.tags = ['Master Role']
     #swagger.summary = 'role user'
@@ -31,6 +25,7 @@ controller.Register = async (req, res, next) => {
     if (result) throw new NotFoundError("Data has register");
 
     result = await AuthUserModel.create(payload);
+
     delete payload.password;
     return res.status(200).json({ status: 200, result });
   } catch (err) {

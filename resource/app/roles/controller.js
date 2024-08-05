@@ -1,23 +1,17 @@
-const { where } = require("sequelize");
 const { globalFunc } = require("../../helper/global-func");
-const { CategoryModel } = require("../../models/category");
+const { RolesModel } = require("../../models/roles");
 const { BadRequestError, NotFoundError } = require("../../utils/errors");
 const controller = {};
 
 controller.index = async (req, res, next) => {
   try {
-    /*
-      #swagger.security = [{
-        "bearerAuth": []
-      }]
-    */
     /* 
-    #swagger.tags = ['CATEGORIES']
+    #swagger.tags = ['ROLE USER']
     #swagger.summary = 'filter every campaign'
     #swagger.description = 'this for filter campaign using category fundraising'
   */
-    const result = await CategoryModel.findAll({
-      attributes: ["id", ["name", "title"], ["slug", "slug_name"]],
+    const result = await RolesModel.findAll({
+      attributes: ["id", "role_name"],
     });
 
     return res
@@ -31,26 +25,26 @@ controller.index = async (req, res, next) => {
 controller.create = async (req, res, next) => {
   try {
     /*
-      #swagger.security = [{
-        "bearerAuth": []
-      }]
-    */
+        #swagger.security = [{
+          "bearerAuth": []
+        }]
+      */
     /* 
-    #swagger.tags = ['CATEGORIES']
+    #swagger.tags = ['ROLE USER']
     #swagger.summary = 'filter every campaign'
     #swagger.description = 'this for filter campaign using category fundraising'
     #swagger.parameters['obj'] = {
       in: 'body',
       description: 'Create role',
-      schema: { $ref: '#/definitions/BodyCategorySchema' }
+      schema: { $ref: '#/definitions/BodyRolesSchema' }
     }
   */
     const payload = req.body;
 
-    payload.slug = globalFunc.GenerateSlug(payload.name);
-    payload.name = globalFunc.titleCase(payload.name);
+    payload.role_name = globalFunc.titleCase(payload.role_name);
 
-    const [result, duplicate] = await CategoryModel.upsert(payload);
+    const [result, duplicate] = await RolesModel.upsert(payload);
+
     return res
       .status(200)
       .json({ status: 200, mesage: "Data has been created", data: result });
@@ -67,24 +61,25 @@ controller.update = async (req, res, next) => {
         }]
       */
     /* 
-    #swagger.tags = ['CATEGORIES']
+    #swagger.tags = ['ROLE USER']
     #swagger.summary = 'filter every campaign'
     #swagger.description = 'this for filter campaign using category fundraising'
     #swagger.parameters['obj'] = {
       in: 'body',
       description: 'Create role',
-      schema: { $ref: '#/definitions/BodyCategorySchema' }
+      schema: { $ref: '#/definitions/BodyRolesSchema' }
     }
   */
     const payload = req.body;
     const id = req.params.id;
 
-    const result = await CategoryModel.findOne({ where: { id } });
+    payload.role_name = globalFunc.titleCase(payload.role_name);
+
+    const result = await RolesModel.findOne({ where: { id } });
     if (!result) throw new NotFoundError(`Data with id "${id}" not found!`);
 
     payload.slug = globalFunc.GenerateSlug(payload.name);
-    payload.name = globalFunc.titleCase(payload.name);
-    await CategoryModel.update({ ...payload }, { where: { id } });
+    await RolesModel.update({ ...payload }, { where: { id } });
 
     return res
       .status(200)
@@ -102,16 +97,16 @@ controller.destroy = async (req, res, next) => {
         }]
       */
     /* 
-    #swagger.tags = ['CATEGORIES']
+    #swagger.tags = ['ROLE USER']
     #swagger.summary = 'filter every campaign'
     #swagger.description = 'this for filter campaign using category fundraising'
   */
     const id = req.params.id;
 
-    const result = await CategoryModel.findOne({ where: { id } });
+    const result = await RolesModel.findOne({ where: { id } });
     if (!result) throw new NotFoundError(`Data with id "${id}" not found!`);
 
-    await CategoryModel.update({ deletedAt: Date.now() }, { where: { id } });
+    await RolesModel.update({ deletedAt: Date.now() }, { where: { id } });
     return res
       .status(200)
       .json({ status: 200, message: "Data has been deleted!", data: null });

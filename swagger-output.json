@@ -43,12 +43,7 @@
           "200": {
             "description": "OK"
           }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        }
       }
     },
     "/auth/signin": {
@@ -78,7 +73,7 @@
     "/category/": {
       "get": {
         "tags": [
-          "Setting Category"
+          "CATEGORIES"
         ],
         "summary": "filter every campaign",
         "description": "this for filter campaign using category fundraising",
@@ -86,11 +81,16 @@
           "200": {
             "description": "OK"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       },
       "post": {
         "tags": [
-          "Setting Category"
+          "CATEGORIES"
         ],
         "summary": "filter every campaign",
         "description": "this for filter campaign using category fundraising",
@@ -108,13 +108,18 @@
           "200": {
             "description": "OK"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/category/{id}": {
       "put": {
         "tags": [
-          "Setting Category"
+          "CATEGORIES"
         ],
         "summary": "filter every campaign",
         "description": "this for filter campaign using category fundraising",
@@ -138,11 +143,16 @@
           "200": {
             "description": "OK"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       },
       "delete": {
         "tags": [
-          "Setting Category"
+          "CATEGORIES"
         ],
         "summary": "filter every campaign",
         "description": "this for filter campaign using category fundraising",
@@ -158,7 +168,113 @@
           "200": {
             "description": "OK"
           }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/role/": {
+      "get": {
+        "tags": [
+          "ROLE USER"
+        ],
+        "summary": "filter every campaign",
+        "description": "this for filter campaign using category fundraising",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
         }
+      },
+      "post": {
+        "tags": [
+          "ROLE USER"
+        ],
+        "summary": "filter every campaign",
+        "description": "this for filter campaign using category fundraising",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Create role",
+            "schema": {
+              "$ref": "#/definitions/BodyRolesSchema"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/role/{id}": {
+      "put": {
+        "tags": [
+          "ROLE USER"
+        ],
+        "summary": "filter every campaign",
+        "description": "this for filter campaign using category fundraising",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Create role",
+            "schema": {
+              "$ref": "#/definitions/BodyRolesSchema"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "ROLE USER"
+        ],
+        "summary": "filter every campaign",
+        "description": "this for filter campaign using category fundraising",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     }
   },
@@ -173,7 +289,16 @@
         "password": {
           "type": "string",
           "example": "example secret"
-        }
+        },
+        "username": {
+          "type": "string",
+          "example": "example secret"
+        },
+        "phone_number": {
+          "type": "string",
+          "example": "example secret"
+        },
+        "role_id": {}
       }
     },
     "QueryAuthUserSchema": {
@@ -191,18 +316,16 @@
         "name": {
           "type": "string",
           "example": "example secret"
-        },
-        "icon": {}
+        }
       }
     },
-    "QueryCategorySchema": {
+    "BodyRolesSchema": {
       "type": "object",
       "properties": {
-        "name": {
+        "role_name": {
           "type": "string",
-          "example": "example secret"
-        },
-        "icon": {}
+          "example": "admin"
+        }
       }
     },
     "NotFound": {
