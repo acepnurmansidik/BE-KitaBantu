@@ -117,6 +117,161 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/campaign/": {
+      "get": {
+        "tags": [
+          "CAMPAIGN"
+        ],
+        "summary": "filter every campaign",
+        "description": "this for filter campaign using category fundraising",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "CAMPAIGN"
+        ],
+        "summary": "filter every campaign",
+        "description": "this for filter campaign using category fundraising",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Create role",
+            "schema": {
+              "$ref": "#/definitions/BodyCampaignSchema"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/campaign/donate": {
+      "post": {
+        "tags": [
+          "CAMPAIGN"
+        ],
+        "summary": "filter every campaign",
+        "description": "this for filter campaign using category fundraising",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Create role",
+            "schema": {
+              "$ref": "#/definitions/BodyDonateCampaignSchema"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/campaign/{id}": {
+      "put": {
+        "tags": [
+          "CAMPAIGN"
+        ],
+        "summary": "filter every campaign",
+        "description": "this for filter campaign using category fundraising",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Create role",
+            "schema": {
+              "$ref": "#/definitions/BodyCampaignSchema"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "CAMPAIGN"
+        ],
+        "summary": "filter every campaign",
+        "description": "this for filter campaign using category fundraising",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
@@ -509,168 +664,6 @@
           }
         ]
       }
-    },
-    "/campaign/": {
-      "get": {
-        "tags": [
-          "CAMPAIGN"
-        ],
-        "summary": "filter every campaign",
-        "description": "this for filter campaign using category fundraising",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "CAMPAIGN"
-        ],
-        "summary": "filter every campaign",
-        "description": "this for filter campaign using category fundraising",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "obj",
-            "in": "body",
-            "description": "Create role",
-            "schema": {
-              "$ref": "#/definitions/BodyCampaignSchema"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
-    "/campaign/donate": {
-      "post": {
-        "tags": [
-          "CAMPAIGN"
-        ],
-        "summary": "filter every campaign",
-        "description": "this for filter campaign using category fundraising",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "obj",
-            "in": "body",
-            "description": "Create role",
-            "schema": {
-              "$ref": "#/definitions/BodyDonateCampaignSchema"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
-    "/campaign/{id}": {
-      "put": {
-        "tags": [
-          "CAMPAIGN"
-        ],
-        "summary": "filter every campaign",
-        "description": "this for filter campaign using category fundraising",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "obj",
-            "in": "body",
-            "description": "Create role",
-            "schema": {
-              "$ref": "#/definitions/BodyCampaignSchema"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      },
-      "delete": {
-        "tags": [
-          "CAMPAIGN"
-        ],
-        "summary": "filter every campaign",
-        "description": "this for filter campaign using category fundraising",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
     }
   },
   "definitions": {
@@ -811,17 +804,32 @@
         },
         "organizer_id": {},
         "campaign_id": {},
-        "bank_name": {
-          "type": "string",
-          "example": "example secret"
+        "bank": {
+          "type": "object",
+          "properties": {
+            "bank_name": {
+              "type": "string",
+              "example": "example secret"
+            },
+            "account_name": {
+              "type": "string",
+              "example": "example name"
+            },
+            "account_number": {
+              "type": "string",
+              "example": "1773472375472"
+            }
+          }
         },
-        "account_name": {
-          "type": "string",
-          "example": "example name"
-        },
-        "account_number": {
-          "type": "string",
-          "example": "1773472375472"
+        "comment": {
+          "type": "object",
+          "properties": {
+            "name": {},
+            "comment": {
+              "type": "string",
+              "example": "example secret"
+            }
+          }
         }
       }
     },

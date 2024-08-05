@@ -1,6 +1,9 @@
 const express = require("express");
 const controller = require("./controller");
-const { AuthorizeUserLogin } = require("../../middleware/authentication");
+const {
+  AuthorizeUserLogin,
+  AuthorizeRoleAccess,
+} = require("../../middleware/authentication");
 const router = express.Router();
 
 /**
@@ -12,7 +15,17 @@ const router = express.Router();
  */
 router.post("/singup", controller.Register);
 router.post("/signin", controller.Login);
-router.post("/submision", AuthorizeUserLogin, controller.Organizer);
-router.put("/verify/:id", controller.verifyOrganizer);
+router.post(
+  "/submision",
+  AuthorizeUserLogin,
+  AuthorizeRoleAccess("Ultramen"),
+  controller.Organizer,
+);
+router.put(
+  "/verify/:id",
+  AuthorizeUserLogin,
+  AuthorizeRoleAccess("Ultramen"),
+  controller.verifyOrganizer,
+);
 
 module.exports = router;

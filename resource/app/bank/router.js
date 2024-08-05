@@ -1,5 +1,6 @@
 const express = require("express");
 const controller = require("./controller");
+const { AuthorizeRoleAccess } = require("../../middleware/authentication");
 const router = express.Router();
 
 /**
@@ -9,6 +10,7 @@ const router = express.Router();
  * @returns {Array.<User>} 200 - An array of users
  * @returns {Error} 500 - Internal server error
  */
+router.use(AuthorizeRoleAccess("Ultramen"));
 router.get("/", controller.index);
 router.post("/", controller.create);
 router.put("/:id", controller.update);

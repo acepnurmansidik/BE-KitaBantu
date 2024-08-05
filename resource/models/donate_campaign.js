@@ -49,7 +49,7 @@ const DonateCampaignModelDefine = {
   },
   user_id: {
     type: DataTypes.UUID,
-    allowNull: false,
+    allowNull: true,
     references: {
       model: AuthUserModel,
       key: "id",

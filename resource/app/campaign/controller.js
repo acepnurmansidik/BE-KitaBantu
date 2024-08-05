@@ -1,9 +1,10 @@
 const DBConn = require("../../../db");
 const { globalFunc } = require("../../helper/global-func");
 const { CampaignModel } = require("../../models/campaign");
-const { DonateCampaignModel } = require("../../models/danate_campaign");
+const { DonateCampaignModel } = require("../../models/donate_campaign");
+const { DonateCommentsModel } = require("../../models/donate_comments");
 const { PaymentBankModel } = require("../../models/payment_bank");
-const { BadRequestError, NotFoundError } = require("../../utils/errors");
+const { NotFoundError } = require("../../utils/errors");
 const controller = {};
 
 controller.index = async (req, res, next) => {
@@ -139,19 +140,24 @@ controller.createUserDonateCampaign = async (req, res, next) => {
       schema: { $ref: '#/definitions/BodyDonateCampaignSchema' }
     }
   */
-    const { bank_name, account_name, account_number, ...payload } = req.body;
-    payload.user_id = req.login.user_id;
+    const { bank, comment, ...payload } = req.body;
+    payload.user_id = req.login?.user_id;
 
     const result = await DonateCampaignModel.create(payload, { transaction });
-    await PaymentBankModel.create(
-      {
-        bank_name,
-        account_name,
-        account_number,
-        donate_campaign_id: result.id,
-      },
-      { transaction },
-    );
+    await Promise.all([
+      await PaymentBankModel.create(
+        { ...bank, donate_campaign_id: result.id },
+        { transaction },
+      ),
+      await DonateCommentsModel.create(
+        {
+          comment: comment.comment,
+          name: req.login?.username ? req.login?.username : comment.name,
+          donate_campaign_id: result.id,
+        },
+        { transaction },
+      ),
+    ]);
 
     await transaction.commit();
     return res

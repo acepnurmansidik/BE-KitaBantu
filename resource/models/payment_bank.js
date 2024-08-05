@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 const DBConn = require("../../db");
-const { DonateCampaignModel } = require("./danate_campaign");
+const { DonateCampaignModel } = require("./donate_campaign");
 
 const PaymentBankModelDefine = {
   bank_name: {

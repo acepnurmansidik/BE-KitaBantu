@@ -1,5 +1,10 @@
 const express = require("express");
 const controller = require("./controller");
+const {
+  AuthorizeRoleAccess,
+  AuthorizeUserLogin,
+  AuthorizeAnyAccess,
+} = require("../../middleware/authentication");
 const router = express.Router();
 
 /**
@@ -10,8 +15,10 @@ const router = express.Router();
  * @returns {Error} 500 - Internal server error
  */
 router.get("/", controller.index);
+router.post("/donate", AuthorizeAnyAccess, controller.createUserDonateCampaign);
+router.use(AuthorizeUserLogin);
+router.use(AuthorizeRoleAccess("Organizer"));
 router.post("/", controller.create);
-router.post("/donate", controller.createUserDonateCampaign);
 router.put("/:id", controller.update);
 router.delete("/:id", controller.destroy);
 
