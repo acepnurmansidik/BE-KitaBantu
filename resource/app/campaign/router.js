@@ -15,6 +15,7 @@ const router = express.Router();
  * @returns {Error} 500 - Internal server error
  */
 router.get("/", controller.index);
+router.post("/comment", AuthorizeAnyAccess, controller.createCampaignComment);
 router.post("/donate", AuthorizeAnyAccess, controller.createUserDonateCampaign);
 router.use(AuthorizeUserLogin);
 router.use(AuthorizeRoleAccess("Organizer"));

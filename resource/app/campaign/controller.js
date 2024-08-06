@@ -1,6 +1,7 @@
 const DBConn = require("../../../db");
 const { globalFunc } = require("../../helper/global-func");
 const { CampaignModel } = require("../../models/campaign");
+const { CampaignCommentModel } = require("../../models/campaign_comment");
 const { DonateCampaignModel } = require("../../models/donate_campaign");
 const { DonateCommentsModel } = require("../../models/donate_comments");
 const { PaymentBankModel } = require("../../models/payment_bank");
@@ -141,7 +142,7 @@ controller.createUserDonateCampaign = async (req, res, next) => {
     }
   */
     const { bank, comment, ...payload } = req.body;
-    payload.user_id = req.login?.user_id;
+    if (req.login) payload.name = req.login.username;
 
     const result = await DonateCampaignModel.create(payload, { transaction });
     await Promise.all([
@@ -165,6 +166,36 @@ controller.createUserDonateCampaign = async (req, res, next) => {
       .json({ status: 200, mesage: "Data has been created", data: result });
   } catch (err) {
     await transaction.rollback();
+    next(err);
+  }
+};
+
+controller.createCampaignComment = async (req, res, next) => {
+  try {
+    /*
+      #swagger.security = [{
+        "bearerAuth": []
+      }]
+    */
+    /* 
+    #swagger.tags = ['CAMPAIGN']
+    #swagger.summary = 'filter every campaign'
+    #swagger.description = 'this for filter campaign using category fundraising'
+    #swagger.parameters['obj'] = {
+      in: 'body',
+      description: 'Create role',
+      schema: { $ref: '#/definitions/BodyCampaignCommentSchema' }
+    }
+  */
+    const payload = req.body;
+    if (req.login) payload.name = req.login.username;
+
+    await CampaignCommentModel.create(payload);
+
+    return res
+      .status(200)
+      .json({ status: 200, mesage: "Data has been created", data: null });
+  } catch (err) {
     next(err);
   }
 };
