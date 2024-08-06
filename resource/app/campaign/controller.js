@@ -142,7 +142,7 @@ controller.createUserDonateCampaign = async (req, res, next) => {
     }
   */
     const { bank, comment, ...payload } = req.body;
-    if (req.login) payload.name = req.login.username;
+    if (req.login) payload.user_id = req.login?.user_id;
 
     const result = await DonateCampaignModel.create(payload, { transaction });
     await Promise.all([
@@ -163,7 +163,7 @@ controller.createUserDonateCampaign = async (req, res, next) => {
     await transaction.commit();
     return res
       .status(200)
-      .json({ status: 200, mesage: "Data has been created", data: result });
+      .json({ status: 200, mesage: globalFunc.sayThanks(), data: result });
   } catch (err) {
     await transaction.rollback();
     next(err);
@@ -188,7 +188,10 @@ controller.createCampaignComment = async (req, res, next) => {
     }
   */
     const payload = req.body;
-    if (req.login) payload.name = req.login.username;
+    if (req.login) {
+      payload.name = req.login.username;
+      payload.user_id = req.login.user_id;
+    }
 
     await CampaignCommentModel.create(payload);
 

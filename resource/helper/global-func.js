@@ -177,4 +177,31 @@ globalFunc.titleCase = (title) => {
   return title.replace(/\b[a-z]/g, (char) => char.toUpperCase());
 };
 
+globalFunc.sayThanks = () => {
+  const word = [
+    "Terima kasih, pahlawan lingkungan! 🌿",
+    "Terima kasih atas dukunganmu! 🙏",
+    "Anda luar biasa, terima kasih! ⭐",
+    "Terima kasih telah peduli! 💖",
+    "Sumbanganmu sangat berarti! 💰",
+    "Terima kasih atas kebaikanmu! 😊",
+    "Terima kasih telah berbagi! 🤝",
+    "Terima kasih atas kepedulianmu! 🌍",
+    "Terima kasih telah membuat perbedaan! 🕊️",
+    "Terima kasih telah mendukung kami! 💪",
+    "Bantuanmu sangat dihargai! 🙌",
+    "Terima kasih atas kontribusimu! 🏆",
+    "Terima kasih atas kemurahan hatimu! ❤️",
+    "Terima kasih telah membantu sesama! 🤗",
+    "Terima kasih telah menyelamatkan bumi! 🌱",
+    "Terima kasih atas empati dan cinta! 💕",
+    "Terima kasih telah berdonasi! 💳",
+    "Terima kasih atas komitmenmu! 🎯",
+    "Terima kasih atas semangatmu! 🔥",
+    "Terima kasih telah menjadi inspirasi! 🌟",
+  ];
+
+  return word[((Math.random() * 100) / word.length).toFixed(0)];
+};
+
 module.exports = { globalFunc, verifyJwtToken };
