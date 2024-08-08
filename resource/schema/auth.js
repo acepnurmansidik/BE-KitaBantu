@@ -6,6 +6,10 @@ const AuthUserSchema = {
   BodyAuthSigninSchema: {
     email: "example@gmail.com",
     password: "example secret",
+    device_token: "token secret",
+  },
+  BodyDeviceTokenSchema: {
+    device_token: "token secret",
   },
   BodyOrganizerSchema: OrganizerModelDefine,
 

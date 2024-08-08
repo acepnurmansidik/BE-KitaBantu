@@ -15,6 +15,7 @@ const router = express.Router();
  */
 router.post("/singup", controller.Register);
 router.post("/signin", controller.Login);
+router.put("/on-refresh", AuthorizeUserLogin, controller.onRefreshTokenDevice);
 router.post(
   "/submision",
   AuthorizeUserLogin,

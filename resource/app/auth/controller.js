@@ -57,7 +57,7 @@ controller.Login = async (req, res, next) => {
     }
   */
   try {
-    const { email, password } = req.body;
+    const { email, password, device_token } = req.body;
     // check body
     if (!email || !password)
       throw new BadRequestError("Credentials is invalid");
@@ -79,6 +79,7 @@ controller.Login = async (req, res, next) => {
 
     // create JWT token for response
     const result = await globalFunc.generateJwtToken(data.toJSON());
+    await AuthUserModel.update({ device_token }, { where: { email } });
 
     response.MethodResponse(res, methodConstant.GET, result);
   } catch (err) {
@@ -165,6 +166,37 @@ controller.verifyOrganizer = async (req, res, next) => {
     });
   } catch (err) {
     await transaction.rollback();
+    next(err);
+  }
+};
+
+controller.onRefreshTokenDevice = async (req, res, next) => {
+  /*
+      #swagger.security = [{
+        "bearerAuth": []
+      }]
+    */
+  /* 
+    #swagger.tags = ['Master Role']
+    #swagger.summary = 'role user'
+    #swagger.description = 'every user has role for access'
+    #swagger.parameters['obj'] = {
+      in: 'body',
+      description: 'Create role',
+      schema: { $ref: '#/definitions/BodyDeviceTokenSchema' }
+    }
+  */
+  try {
+    await AuthUserModel.update(
+      { device_token: req.body.device_token },
+      { where: { email: req.login.email } },
+    );
+    return res.status(200).json({
+      status: 201,
+      message: "Data has been update",
+      data: null,
+    });
+  } catch (err) {
     next(err);
   }
 };

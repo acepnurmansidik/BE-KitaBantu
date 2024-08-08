@@ -27,6 +27,10 @@ const AuthUserModelDefine = {
     allowNull: false,
     defaultValue: "example secret",
   },
+  device_token: {
+    type: DataTypes.TEXT,
+    defaultValue: "token",
+  },
   activation: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
@@ -48,12 +52,6 @@ const AuthUserModel = DBConn.define("auth_users", AuthUserModelDefine, {
   createdAt: true,
   updatedAt: true,
   paranoid: true,
-  indexes: [
-    {
-      unique: true,
-      fields: ["role_id"],
-    },
-  ],
 });
 
 AuthUserModel.belongsTo(RolesModel, { foreignKey: "role_id" });

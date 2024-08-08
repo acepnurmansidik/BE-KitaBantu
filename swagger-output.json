@@ -70,6 +70,40 @@
         }
       }
     },
+    "/auth/on-refresh": {
+      "put": {
+        "tags": [
+          "Master Role"
+        ],
+        "summary": "role user",
+        "description": "every user has role for access",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Create role",
+            "schema": {
+              "$ref": "#/definitions/BodyDeviceTokenSchema"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/auth/submision": {
       "post": {
         "tags": [
@@ -724,6 +758,10 @@
         "phone_number": {
           "type": "string",
           "example": "example secret"
+        },
+        "device_token": {
+          "type": "string",
+          "example": "token"
         }
       }
     },
@@ -737,6 +775,19 @@
         "password": {
           "type": "string",
           "example": "example secret"
+        },
+        "device_token": {
+          "type": "string",
+          "example": "token secret"
+        }
+      }
+    },
+    "BodyDeviceTokenSchema": {
+      "type": "object",
+      "properties": {
+        "device_token": {
+          "type": "string",
+          "example": "token secret"
         }
       }
     },
