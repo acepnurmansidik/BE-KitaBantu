@@ -106,7 +106,6 @@ controller.Organizer = async (req, res, next) => {
   */
 
     const payload = req.body;
-
     payload.auth_id = req.login.id;
 
     const [result, duplicate] = await OrganizerModel.upsert(payload);

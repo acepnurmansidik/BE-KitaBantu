@@ -19,7 +19,7 @@ router.put("/on-refresh", AuthorizeUserLogin, controller.onRefreshTokenDevice);
 router.post(
   "/submision",
   AuthorizeUserLogin,
-  AuthorizeRoleAccess("Ultramen"),
+  AuthorizeRoleAccess("Guest"),
   controller.Organizer,
 );
 router.put(

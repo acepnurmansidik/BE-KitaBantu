@@ -23,7 +23,7 @@ const AuthorizeUserLogin = async (req, res, next) => {
     const [verifyData, dataOrganizer] = await Promise.all([
       await AuthUserModel.findOne({
         where: { email: dataValid.email },
-        attributes: ["id", "username"],
+        attributes: ["id", "username", "device_token"],
         include: {
           model: RolesModel,
           attributes: ["role_name"],
@@ -49,6 +49,7 @@ const AuthorizeUserLogin = async (req, res, next) => {
     req.login = {
       user_id: verifyData.id,
       username: verifyData.username,
+      device_token: verifyData.device_token,
       organizer_id: !dataOrganizer ? null : dataOrganizer.id,
       ...dataValid,
       ...verifyData.role.toJSON(),

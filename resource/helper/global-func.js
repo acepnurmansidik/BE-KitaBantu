@@ -4,6 +4,13 @@ const ENV = require("../utils/config");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { UnauthenticatedError } = require("../utils/errors");
+const admin = require("firebase-admin");
+const serviceKey = require("../../serviceAccount.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceKey),
+  databaseURL: ENV.firebaseDb,
+});
 
 const transporter = nodemailer.createTransport({
   host: ENV.emailHost,
@@ -202,6 +209,23 @@ globalFunc.sayThanks = () => {
   ];
 
   return word[((Math.random() * 100) / word.length).toFixed(0)];
+};
+
+globalFunc.sendSingleNotification = async ({ token, title, body }) => {
+  const message = {
+    token,
+    notification: {
+      title,
+      body,
+    },
+    android: {
+      notification: {
+        icon: "ic_notification",
+      },
+    },
+  };
+
+  await admin.messaging().send(message);
 };
 
 module.exports = { globalFunc, verifyJwtToken };

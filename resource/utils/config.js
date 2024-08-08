@@ -20,6 +20,7 @@ const ENV = {
   emailSender: process.env.SOURCE_EMAIL,
   emailPassword: process.env.PASSWORD_EMAIL,
   saltPassword: process.env.SALT,
+  firebaseDb: process.env.FAREBASE_DB_URL,
 };
 
 module.exports = ENV;
