@@ -24,7 +24,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-app.use("/", indexRouter);
+const apiV1 = "/api/v1/";
+app.use(apiV1, indexRouter);
 
 // middleware
 app.use(notFoundMiddleware);

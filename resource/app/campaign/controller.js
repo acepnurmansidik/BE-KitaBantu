@@ -5,7 +5,9 @@ const { CampaignCommentModel } = require("../../models/campaign_comment");
 const { DonateCampaignModel } = require("../../models/donate_campaign");
 const { DonateCommentsModel } = require("../../models/donate_comments");
 const { PaymentBankModel } = require("../../models/payment_bank");
+const { methodConstant } = require("../../utils/constanta");
 const { NotFoundError } = require("../../utils/errors");
+const responseAPI = require("../../utils/response");
 const controller = {};
 
 controller.index = async (req, res, next) => {
@@ -22,9 +24,11 @@ controller.index = async (req, res, next) => {
   */
     const result = await CampaignModel.findAll();
 
-    return res
-      .status(200)
-      .json({ status: 200, mesage: "Data has been retrieved", data: result });
+    return responseAPI.MethodResponse({
+      res,
+      method: methodConstant.GET,
+      data: result,
+    });
   } catch (err) {
     next(err);
   }
@@ -54,9 +58,12 @@ controller.create = async (req, res, next) => {
     payload.organizer_id = req.login.organizer_id;
 
     const [result, duplicate] = await CampaignModel.upsert(payload);
-    return res
-      .status(200)
-      .json({ status: 200, mesage: "Data has been created", data: result });
+
+    return responseAPI.MethodResponse({
+      res,
+      method: methodConstant.POST,
+      data: result,
+    });
   } catch (err) {
     next(err);
   }
@@ -89,9 +96,11 @@ controller.update = async (req, res, next) => {
     payload.campaign_name = globalFunc.titleCase(payload.campaign_name);
     await CampaignModel.update({ ...payload }, { where: { id } });
 
-    return res
-      .status(200)
-      .json({ status: 200, message: "Data has been updated!", data: null });
+    return responseAPI.MethodResponse({
+      res,
+      method: methodConstant.PUT,
+      data: null,
+    });
   } catch (err) {
     next(err);
   }
@@ -115,9 +124,12 @@ controller.destroy = async (req, res, next) => {
     if (!result) throw new NotFoundError(`Data with id "${id}" not found!`);
 
     await CampaignModel.update({ deletedAt: Date.now() }, { where: { id } });
-    return res
-      .status(200)
-      .json({ status: 200, message: "Data has been deleted!", data: null });
+
+    return responseAPI.MethodResponse({
+      res,
+      method: methodConstant.DELETE,
+      data: result,
+    });
   } catch (err) {
     next(err);
   }
@@ -161,9 +173,12 @@ controller.createUserDonateCampaign = async (req, res, next) => {
     ]);
 
     await transaction.commit();
-    return res
-      .status(200)
-      .json({ status: 200, mesage: globalFunc.sayThanks(), data: result });
+
+    return responseAPI.MethodResponse({
+      res,
+      method: methodConstant.POST,
+      data: result,
+    });
   } catch (err) {
     await transaction.rollback();
     next(err);
@@ -195,9 +210,11 @@ controller.createCampaignComment = async (req, res, next) => {
 
     await CampaignCommentModel.create(payload);
 
-    return res
-      .status(200)
-      .json({ status: 200, mesage: "Data has been created", data: null });
+    return responseAPI.MethodResponse({
+      res,
+      method: methodConstant.POST,
+      data: null,
+    });
   } catch (err) {
     next(err);
   }

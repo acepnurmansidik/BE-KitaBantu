@@ -64,5 +64,6 @@ Object.keys(AuthUserModelDefine).map((item) => {
 });
 
 delete AuthUserModelDefine.activation;
+delete AuthUserModelDefine.phone_number;
 delete AuthUserModelDefine.role_id;
 module.exports = { AuthUserModelDefine, AuthUserModel };

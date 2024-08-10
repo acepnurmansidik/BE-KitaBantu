@@ -2,6 +2,8 @@ const { where } = require("sequelize");
 const { globalFunc } = require("../../helper/global-func");
 const { CategoryModel } = require("../../models/category");
 const { BadRequestError, NotFoundError } = require("../../utils/errors");
+const responseAPI = require("../../utils/response");
+const { methodConstant } = require("../../utils/constanta");
 const controller = {};
 
 controller.index = async (req, res, next) => {
@@ -20,9 +22,11 @@ controller.index = async (req, res, next) => {
       attributes: ["id", ["name", "title"], ["slug", "slug_name"]],
     });
 
-    return res
-      .status(200)
-      .json({ status: 200, mesage: "Data has been retrieved", data: result });
+    return responseAPI.MethodResponse({
+      res,
+      method: methodConstant.GET,
+      data: result,
+    });
   } catch (err) {
     next(err);
   }
@@ -51,9 +55,12 @@ controller.create = async (req, res, next) => {
     payload.name = globalFunc.titleCase(payload.name);
 
     const [result, duplicate] = await CategoryModel.upsert(payload);
-    return res
-      .status(200)
-      .json({ status: 200, mesage: "Data has been created", data: result });
+
+    return responseAPI.MethodResponse({
+      res,
+      method: methodConstant.POST,
+      data: result,
+    });
   } catch (err) {
     next(err);
   }
@@ -86,9 +93,11 @@ controller.update = async (req, res, next) => {
     payload.name = globalFunc.titleCase(payload.name);
     await CategoryModel.update({ ...payload }, { where: { id } });
 
-    return res
-      .status(200)
-      .json({ status: 200, message: "Data has been updated!", data: null });
+    return responseAPI.MethodResponse({
+      res,
+      method: methodConstant.PUT,
+      data: null,
+    });
   } catch (err) {
     next(err);
   }
@@ -112,9 +121,12 @@ controller.destroy = async (req, res, next) => {
     if (!result) throw new NotFoundError(`Data with id "${id}" not found!`);
 
     await CategoryModel.update({ deletedAt: Date.now() }, { where: { id } });
-    return res
-      .status(200)
-      .json({ status: 200, message: "Data has been deleted!", data: null });
+
+    return responseAPI.MethodResponse({
+      res,
+      method: methodConstant.DELETE,
+      data: null,
+    });
   } catch (err) {
     next(err);
   }

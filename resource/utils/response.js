@@ -1,9 +1,9 @@
 const { StatusCodes } = require("http-status-codes");
 const { methodConstant } = require("./constanta");
 
-let response = {};
+const response = {};
 
-response.MethodResponse = (res, method, data) => {
+response.MethodResponse = ({ res, method, data }) => {
   let code = StatusCodes.OK;
   let message;
   switch (method) {
@@ -30,7 +30,7 @@ response.MethodResponse = (res, method, data) => {
   });
 };
 
-response.GetPaginationResponse = (res, data, page, page_size, total) => {
+response.GetPaginationResponse = ({ res, data, page, page_size }) => {
   return res.status(StatusCodes.CREATED).json({
     code: StatusCodes.OK,
     status: true,
@@ -40,7 +40,7 @@ response.GetPaginationResponse = (res, data, page, page_size, total) => {
       pagination: {
         page,
         page_size,
-        total,
+        total: data.length,
       },
     },
   });

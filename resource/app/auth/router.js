@@ -13,8 +13,8 @@ const router = express.Router();
  * @returns {Array.<User>} 200 - An array of users
  * @returns {Error} 500 - Internal server error
  */
-router.post("/singup", controller.Register);
-router.post("/signin", controller.Login);
+router.post("/sign-up", controller.Register);
+router.post("/sign-in", controller.Login);
 router.put("/on-refresh", AuthorizeUserLogin, controller.onRefreshTokenDevice);
 router.post(
   "/submision",

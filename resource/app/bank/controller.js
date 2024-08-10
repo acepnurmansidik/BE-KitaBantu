@@ -1,6 +1,8 @@
 const { globalFunc } = require("../../helper/global-func");
 const { BankModel } = require("../../models/bank");
+const { methodConstant } = require("../../utils/constanta");
 const { BadRequestError, NotFoundError } = require("../../utils/errors");
+const responseAPI = require("../../utils/response");
 const controller = {};
 
 controller.index = async (req, res, next) => {
@@ -21,9 +23,11 @@ controller.index = async (req, res, next) => {
       },
     });
 
-    return res
-      .status(200)
-      .json({ status: 200, mesage: "Data has been retrieved", data: result });
+    return responseAPI.MethodResponse({
+      res,
+      method: methodConstant.GET,
+      data: result,
+    });
   } catch (err) {
     next(err);
   }
@@ -49,9 +53,12 @@ controller.create = async (req, res, next) => {
     const payload = req.body;
 
     const [result, duplicate] = await BankModel.upsert(payload);
-    return res
-      .status(200)
-      .json({ status: 200, mesage: "Data has been created", data: result });
+
+    return responseAPI.MethodResponse({
+      res,
+      method: methodConstant.POST,
+      data: null,
+    });
   } catch (err) {
     next(err);
   }
@@ -82,9 +89,11 @@ controller.update = async (req, res, next) => {
 
     await BankModel.update({ ...payload }, { where: { id } });
 
-    return res
-      .status(200)
-      .json({ status: 200, message: "Data has been updated!", data: null });
+    return responseAPI.MethodResponse({
+      res,
+      method: methodConstant.PUT,
+      data: null,
+    });
   } catch (err) {
     next(err);
   }
@@ -108,9 +117,12 @@ controller.destroy = async (req, res, next) => {
     if (!result) throw new NotFoundError(`Data with id "${id}" not found!`);
 
     await BankModel.update({ deletedAt: Date.now() }, { where: { id } });
-    return res
-      .status(200)
-      .json({ status: 200, message: "Data has been deleted!", data: null });
+
+    return responseAPI.MethodResponse({
+      res,
+      method: methodConstant.DELETE,
+      data: null,
+    });
   } catch (err) {
     next(err);
   }

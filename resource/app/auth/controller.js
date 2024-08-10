@@ -7,6 +7,7 @@ const { OrganizerModel } = require("../../models/organizer");
 const { RolesModel } = require("../../models/roles");
 const { Op } = require("sequelize");
 const DBConn = require("../../../db");
+const responseAPI = require("../../utils/response");
 
 const controller = {};
 controller.Register = async (req, res, next) => {
@@ -36,10 +37,14 @@ controller.Register = async (req, res, next) => {
     if (result) throw new BadRequestError("Account has register");
 
     payload.role_id = role.id;
-    result = await AuthUserModel.create(payload);
+    await AuthUserModel.create(payload);
 
     delete payload.password;
-    return res.status(200).json({ status: 200, result });
+    return responseAPI.MethodResponse({
+      res,
+      method: methodConstant.POST,
+      data: null,
+    });
   } catch (err) {
     next(err);
   }
@@ -81,7 +86,11 @@ controller.Login = async (req, res, next) => {
     const result = await globalFunc.generateJwtToken(data.toJSON());
     await AuthUserModel.update({ device_token }, { where: { email } });
 
-    response.MethodResponse(res, methodConstant.GET, result);
+    return responseAPI.MethodResponse({
+      res,
+      method: methodConstant.POST,
+      data: result,
+    });
   } catch (err) {
     next(err);
   }
@@ -110,7 +119,11 @@ controller.Organizer = async (req, res, next) => {
 
     const [result, duplicate] = await OrganizerModel.upsert(payload);
 
-    return res.status(200).json({ status: 200, result });
+    return responseAPI.MethodResponse({
+      res,
+      method: methodConstant.POST,
+      data: result,
+    });
   } catch (err) {
     next(err);
   }
@@ -158,9 +171,9 @@ controller.verifyOrganizer = async (req, res, next) => {
 
     await transaction.commit();
 
-    return res.status(200).json({
-      status: 200,
-      message: "Organizer has been verified",
+    return responseAPI.MethodResponse({
+      res,
+      method: methodConstant.PUT,
       data: null,
     });
   } catch (err) {
@@ -190,9 +203,10 @@ controller.onRefreshTokenDevice = async (req, res, next) => {
       { device_token: req.body.device_token },
       { where: { email: req.login.email } },
     );
-    return res.status(200).json({
-      status: 201,
-      message: "Data has been update",
+
+    return responseAPI.MethodResponse({
+      res,
+      method: methodConstant.PUT,
       data: null,
     });
   } catch (err) {
