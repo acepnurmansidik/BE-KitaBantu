@@ -223,6 +223,30 @@ globalFunc.sendSingleNotification = async ({ token, title, body }) => {
         icon: "ic_notification",
       },
     },
+    data: {
+      id: "12345",
+      click_action: "FLUTTER_NOTIFICATION_CLICK",
+    },
+  };
+
+  await admin.messaging().send(message);
+};
+globalFunc.sendMultiNotification = async ({ tokens, title, body }) => {
+  const message = {
+    tokens,
+    notification: {
+      title,
+      body,
+    },
+    android: {
+      notification: {
+        icon: "ic_notification",
+      },
+    },
+    data: {
+      id: "12345",
+      click_action: "FLUTTER_NOTIFICATION_CLICK",
+    },
   };
 
   await admin.messaging().send(message);
