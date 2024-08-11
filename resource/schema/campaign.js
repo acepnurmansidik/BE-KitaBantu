@@ -5,7 +5,7 @@ const { DonateCommentsModelDefine } = require("../models/donate_comments");
 const { PaymentBankModelDefine } = require("../models/payment_bank");
 
 const CampaignSchema = {
-  BodyCampaignSchema: CampaignModelDefine,
+  BodyCampaignSchema: { ...CampaignModelDefine, list_image: [] },
   BodyDonateCampaignSchema: {
     ...DonateCampaignModelDefine,
     bank: PaymentBankModelDefine,

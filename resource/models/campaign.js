@@ -29,10 +29,12 @@ const CampaignModelDefine = {
   start_date: {
     type: DataTypes.DATE,
     allowNull: false,
+    defaultValue: "2024-08-11T13:58:41.224Z",
   },
   end_date: {
     type: DataTypes.DATE,
     allowNull: false,
+    defaultValue: "2024-08-31T13:58:41.000Z",
   },
   organizer_id: {
     type: DataTypes.UUID,

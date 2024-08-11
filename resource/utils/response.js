@@ -3,29 +3,37 @@ const { methodConstant } = require("./constanta");
 
 const response = {};
 
-response.MethodResponse = ({ res, method, data }) => {
+response.MethodResponse = ({ res, method, data, message }) => {
   let code = StatusCodes.OK;
-  let message;
+  let responseMessage;
   switch (method) {
     case methodConstant.POST:
       code = StatusCodes.CREATED;
-      message = "Data has created successfully!";
+      responseMessage = "Data has created successfully!";
       break;
     case methodConstant.PUT:
-      message = "Data has updated successfully!";
+      responseMessage = "Data has updated successfully!";
       break;
     case methodConstant.DELETE:
-      message = "Data has deleted successfully!";
+      responseMessage = "Data has deleted successfully!";
+      break;
+    case methodConstant.BAD_REQUEST:
+      code = StatusCodes.BAD_REQUEST;
+      responseMessage = message ? message : "Bad request!";
+      break;
+    case methodConstant.INTERNAL_SERVER_ERROR:
+      code = StatusCodes.INTERNAL_SERVER_ERROR;
+      responseMessage = message ? message : "Internal server error!";
       break;
     default:
-      message = "Data retrieved successfully!";
+      responseMessage = "Data retrieved successfully!";
       break;
   }
 
   return res.status(code).json({
     code,
     status: true,
-    message,
+    message: responseMessage,
     data,
   });
 };

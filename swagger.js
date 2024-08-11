@@ -6,9 +6,9 @@ const endpointsFiles = ["./app.js"]; // Sesuaikan dengan file-file yang berisi r
 
 const doc = {
   info: {
-    version: "", // by default: '1.0.0'
+    version: "1.0.1", // by default: '1.0.0'
     title: "REST API", // by default: 'REST API'
-    description: "", // by default: ''
+    description: "Aplikasi fundraising KitaBantu", // by default: ''
   },
   host: "localhost:3022", // by default: 'localhost:3022'
   basePath: "/", // by default: '/'

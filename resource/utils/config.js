@@ -21,6 +21,7 @@ const ENV = {
   emailPassword: process.env.PASSWORD_EMAIL,
   saltPassword: process.env.SALT,
   firebaseDb: process.env.FAREBASE_DB_URL,
+  fileImgPath: process.env.FILE_PATH,
 };
 
 module.exports = ENV;

@@ -1,9 +1,9 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "title": "REST API",
-    "description": ""
+    "description": "Aplikasi fundraising KitaBantu"
   },
   "host": "localhost:3022",
   "basePath": "/",
@@ -181,12 +181,7 @@
           "default": {
             "description": ""
           }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        }
       },
       "post": {
         "tags": [
@@ -591,6 +586,46 @@
         ]
       }
     },
+    "/api/v1/upload/": {
+      "put": {
+        "tags": [
+          "UPLOAD FILE"
+        ],
+        "summary": "upload file",
+        "description": "this rest API for purpose upload file",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "multFiles",
+            "in": "formData",
+            "type": "array",
+            "required": true,
+            "description": "Some description...",
+            "collectionFormat": "multi",
+            "items": {
+              "type": "file"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/api/v1/role/": {
       "get": {
         "tags": [
@@ -849,7 +884,12 @@
         },
         "start_date": {},
         "end_date": {},
-        "category_id": {}
+        "category_id": {},
+        "list_image": {
+          "type": "array",
+          "example": [],
+          "items": {}
+        }
       }
     },
     "BodyDonateCampaignSchema": {

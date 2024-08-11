@@ -2,7 +2,11 @@ const { verifyJwtToken } = require("../helper/global-func");
 const { AuthUserModel } = require("../models/auth");
 const { OrganizerModel } = require("../models/organizer");
 const { RolesModel } = require("../models/roles");
-const { UnauthenticatedError, BadRequestError } = require("../utils/errors");
+const {
+  UnauthenticatedError,
+  BadRequestError,
+  UnauthorizedError,
+} = require("../utils/errors");
 const NotFound = require("../utils/errors/not-found");
 
 const AuthorizeUserLogin = async (req, res, next) => {
@@ -122,7 +126,7 @@ const AuthorizeAnyAccess = async (req, res, next) => {
 const AuthorizeRoleAccess = (...rolesAccess) => {
   return (req, res, next) => {
     if (!rolesAccess.includes(req.login.role_name))
-      throw new BadRequestError("You have'nt access!");
+      throw new UnauthorizedError("You have'nt access!");
     return next();
   };
 };
