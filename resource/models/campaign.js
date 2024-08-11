@@ -60,6 +60,9 @@ const CampaignModel = DBConn.define("campaigns", CampaignModelDefine, {
   paranoid: true,
 });
 
+CampaignModel.belongsTo(OrganizerModel, { foreignKey: "organizer_id" });
+CampaignModel.belongsTo(CategoryModel, { foreignKey: "category_id" });
+
 Object.keys(CampaignModelDefine).map((item) => {
   CampaignModelDefine[item] = CampaignModelDefine[item]["defaultValue"]
     ? CampaignModelDefine[item]["defaultValue"]

@@ -7,11 +7,6 @@ const controller = {};
 
 controller.index = async (req, res, next) => {
   try {
-    /*
-      #swagger.security = [{
-        "bearerAuth": []
-      }]
-    */
     /* 
     #swagger.tags = ['MASTER BANK']
     #swagger.summary = 'filter every campaign'

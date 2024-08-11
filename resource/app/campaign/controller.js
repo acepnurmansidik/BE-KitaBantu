@@ -2,8 +2,10 @@ const DBConn = require("../../../db");
 const { globalFunc } = require("../../helper/global-func");
 const { CampaignModel } = require("../../models/campaign");
 const { CampaignCommentModel } = require("../../models/campaign_comment");
+const { CategoryModel } = require("../../models/category");
 const { DonateCampaignModel } = require("../../models/donate_campaign");
 const { DonateCommentsModel } = require("../../models/donate_comments");
+const { OrganizerModel } = require("../../models/organizer");
 const { PaymentBankModel } = require("../../models/payment_bank");
 const { methodConstant } = require("../../utils/constanta");
 const { NotFoundError } = require("../../utils/errors");
@@ -12,17 +14,32 @@ const controller = {};
 
 controller.index = async (req, res, next) => {
   try {
-    /*
-      #swagger.security = [{
-        "bearerAuth": []
-      }]
-    */
     /* 
     #swagger.tags = ['CAMPAIGN']
     #swagger.summary = 'filter every campaign'
     #swagger.description = 'this for filter campaign using category fundraising'
   */
-    const result = await CampaignModel.findAll();
+    const result = await CampaignModel.findAll({
+      include: [
+        {
+          model: CategoryModel,
+          attributes: ["id", "name", "slug"],
+        },
+        {
+          model: OrganizerModel,
+          attributes: ["id", "name"],
+        },
+      ],
+      attributes: {
+        exclude: [
+          "createdAt",
+          "updatedAt",
+          "deletedAt",
+          "organizer_id",
+          "category_id",
+        ],
+      },
+    });
 
     return responseAPI.MethodResponse({
       res,

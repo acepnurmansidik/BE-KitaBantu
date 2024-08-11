@@ -70,6 +70,13 @@ controller.Login = async (req, res, next) => {
     const data = await AuthUserModel.findOne({
       where: { email },
       attributes: ["email", "password"],
+      include: [
+        {
+          model: RolesModel,
+          attributes: ["role_name"],
+        },
+      ],
+      // raw: true,
     });
 
     if (!data) throw new NotFoundError("Account not register");
@@ -83,6 +90,7 @@ controller.Login = async (req, res, next) => {
     if (!isMatch) throw new BadRequestError("Credentials is invalid");
 
     // create JWT token for response
+    data.dataValues.role = data.role.dataValues.role_name;
     const result = await globalFunc.generateJwtToken(data.toJSON());
     await AuthUserModel.update({ device_token }, { where: { email } });
 

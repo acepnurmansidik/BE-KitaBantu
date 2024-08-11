@@ -1,18 +1,13 @@
 const { where } = require("sequelize");
 const { globalFunc } = require("../../helper/global-func");
 const { CategoryModel } = require("../../models/category");
-const { BadRequestError, NotFoundError } = require("../../utils/errors");
+const { NotFoundError } = require("../../utils/errors");
 const responseAPI = require("../../utils/response");
 const { methodConstant } = require("../../utils/constanta");
 const controller = {};
 
 controller.index = async (req, res, next) => {
   try {
-    /*
-      #swagger.security = [{
-        "bearerAuth": []
-      }]
-    */
     /* 
     #swagger.tags = ['CATEGORIES']
     #swagger.summary = 'filter every campaign'

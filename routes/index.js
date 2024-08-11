@@ -12,9 +12,9 @@ const {
 
 router.use(`/auth`, authUserRouter);
 router.use(`/campaign`, campaignouter);
-router.use(AuthorizeUserLogin);
 router.use(`/category`, categoryRouter);
-router.use(`/role`, roleRouter);
 router.use(`/bank`, masterBankRouter);
+router.use(AuthorizeUserLogin);
+router.use(`/role`, roleRouter);
 
 module.exports = router;
