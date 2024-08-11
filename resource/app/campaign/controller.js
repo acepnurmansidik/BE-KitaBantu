@@ -34,9 +34,6 @@ controller.index = async (req, res, next) => {
         {
           model: ImagesModel,
           attributes: ["id", "link_url"],
-          where: {
-            status: true,
-          },
         },
       ],
       attributes: {
