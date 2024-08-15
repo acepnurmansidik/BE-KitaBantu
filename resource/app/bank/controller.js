@@ -13,9 +13,7 @@ controller.index = async (req, res, next) => {
     #swagger.description = 'this for filter campaign using category fundraising'
   */
     const result = await BankModel.findAll({
-      attributes: {
-        exclude: ["createdAt", "updatedAt", "deletedAt"],
-      },
+      attributes: ["name","bank_code"],
     });
 
     return responseAPI.MethodResponse({

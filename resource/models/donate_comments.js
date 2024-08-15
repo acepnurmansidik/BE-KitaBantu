@@ -36,6 +36,13 @@ const DonateCommentsModel = DBConn.define(
   },
 );
 
+DonateCommentsModel.belongsTo(DonateCampaignModel, {
+  foreignKey: "donate_campaign_id",
+});
+DonateCampaignModel.hasMany(DonateCommentsModel, {
+  foreignKey: "donate_campaign_id",
+});
+
 Object.keys(DonateCommentsModelDefine).map((item) => {
   DonateCommentsModelDefine[item] = DonateCommentsModelDefine[item][
     "defaultValue"

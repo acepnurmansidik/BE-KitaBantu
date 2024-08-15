@@ -1,4 +1,4 @@
-const { Op } = require("sequelize");
+const { Op, fn, col, cast, literal, Sequelize } = require("sequelize");
 const DBConn = require("../../../db");
 const { globalFunc } = require("../../helper/global-func");
 const { CampaignModel } = require("../../models/campaign");
@@ -20,31 +20,61 @@ controller.index = async (req, res, next) => {
     #swagger.tags = ['CAMPAIGN']
     #swagger.summary = 'filter every campaign'
     #swagger.description = 'this for filter campaign using category fundraising'
+    #swagger.parameters['q'] = { description: 'this for filter campaign using category fundraising' }
   */
+    const query = req.query;
     const result = await CampaignModel.findAll({
+      attributes: {
+        include: [
+          [
+            literal(
+              `(SELECT CAST(COALESCE(SUM("donate_campaigns"."nominal"), 0) AS INTEGER)FROM donate_campaigns WHERE donate_campaigns.campaign_id = campaigns.id)`,
+            ),
+            "total_donate",
+          ],
+          [
+            Sequelize.fn(
+              "TO_CHAR",
+              Sequelize.col("start_date"),
+              "dd FMMonth yyyy",
+            ),
+            "start_date",
+          ],
+          [
+            fn("EXTRACT", literal("DAY FROM (end_date - start_date)")),
+            "deadlines",
+          ],
+        ],
+        exclude: ["createdAt", "deletedAt", "updatedAt"],
+      },
       include: [
         {
           model: CategoryModel,
           attributes: ["id", "name", "slug"],
+          where: {
+            slug: {
+              [Op.iLike]: `%${query.q ? query.q : ""}%`,
+            },
+          },
         },
         {
           model: OrganizerModel,
-          attributes: ["id", "name"],
+          attributes: ["id", "name", "verified"],
+          where: { verified: true },
         },
         {
           model: ImagesModel,
           attributes: ["id", "link_url"],
         },
+        {
+          model: CampaignCommentModel,
+          attributes: ["id", "name", "comment", "date", "is_anonymous"],
+        },
+        {
+          model: DonateCampaignModel,
+          attributes: ["id", "nominal", ["createdAt", "date"]],
+        },
       ],
-      attributes: {
-        exclude: [
-          "createdAt",
-          "updatedAt",
-          "deletedAt",
-          "organizer_id",
-          "category_id",
-        ],
-      },
     });
 
     return responseAPI.MethodResponse({
@@ -211,13 +241,15 @@ controller.createUserDonateCampaign = async (req, res, next) => {
     const result = await DonateCampaignModel.create(payload, { transaction });
     await Promise.all([
       await PaymentBankModel.create(
-        { ...bank, donate_campaign_id: result.id },
+        { ...JSON.parse(bank), donate_campaign_id: result.id },
         { transaction },
       ),
       await DonateCommentsModel.create(
         {
-          comment: comment.comment,
-          name: req.login?.username ? req.login?.username : comment.name,
+          comment: JSON.parse(comment).comment,
+          name: req.login?.username
+            ? req.login?.username
+            : JSON.parse(comment).name,
           donate_campaign_id: result.id,
         },
         { transaction },

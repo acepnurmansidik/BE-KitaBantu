@@ -9,6 +9,10 @@ const PaymentBankModelDefine = {
     unique: true,
     defaultValue: "example secret",
   },
+  bank_code: {
+    type: DataTypes.STRING,
+    defaultValue: "011",
+  },
   account_name: {
     type: DataTypes.STRING,
     allowNull: false,

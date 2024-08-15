@@ -15,6 +15,11 @@ const CampaignCommentModelDefine = {
   date: {
     type: DataTypes.DATE,
   },
+  is_anonymous: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: true,
+  },
   campaign_id: {
     type: DataTypes.UUID,
     allowNull: false,
@@ -43,6 +48,9 @@ const CampaignCommentModel = DBConn.define(
     paranoid: true,
   },
 );
+
+CampaignCommentModel.belongsTo(CampaignModel, { foreignKey: "campaign_id" });
+CampaignModel.hasMany(CampaignCommentModel, { foreignKey: "campaign_id" });
 
 Object.keys(CampaignCommentModelDefine).map((item) => {
   CampaignCommentModelDefine[item] = CampaignCommentModelDefine[item][

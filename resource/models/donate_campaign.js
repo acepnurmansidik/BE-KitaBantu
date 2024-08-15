@@ -69,6 +69,9 @@ const DonateCampaignModel = DBConn.define(
   },
 );
 
+DonateCampaignModel.belongsTo(CampaignModel, { foreignKey: "campaign_id" });
+CampaignModel.hasMany(DonateCampaignModel, { foreignKey: "campaign_id" });
+
 Object.keys(DonateCampaignModelDefine).map((item) => {
   DonateCampaignModelDefine[item] = DonateCampaignModelDefine[item][
     "defaultValue"

@@ -177,6 +177,14 @@
         ],
         "summary": "filter every campaign",
         "description": "this for filter campaign using category fundraising",
+        "parameters": [
+          {
+            "name": "q",
+            "description": "this for filter campaign using category fundraising",
+            "in": "query",
+            "type": "string"
+          }
+        ],
         "responses": {
           "default": {
             "description": ""
@@ -882,8 +890,14 @@
           "type": "string",
           "example": "lingkunngan hidup yang sehat diperlukan untuk keberlangsungan hidup makhluk hidup"
         },
-        "start_date": {},
-        "end_date": {},
+        "start_date": {
+          "type": "string",
+          "example": "2024-08-11T13:58:41.224Z"
+        },
+        "end_date": {
+          "type": "string",
+          "example": "2024-08-31T13:58:41.000Z"
+        },
         "category_id": {},
         "list_image": {
           "type": "array",
@@ -918,6 +932,10 @@
               "type": "string",
               "example": "example secret"
             },
+            "bank_code": {
+              "type": "string",
+              "example": "011"
+            },
             "account_name": {
               "type": "string",
               "example": "example name"
@@ -947,6 +965,10 @@
         "comment": {
           "type": "string",
           "example": "ini adalah komentar"
+        },
+        "is_anonymous": {
+          "type": "boolean",
+          "example": true
         },
         "campaign_id": {}
       }
