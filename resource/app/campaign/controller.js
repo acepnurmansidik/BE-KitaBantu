@@ -12,6 +12,7 @@ const { PaymentBankModel } = require("../../models/payment_bank");
 const { methodConstant } = require("../../utils/constanta");
 const { NotFoundError } = require("../../utils/errors");
 const responseAPI = require("../../utils/response");
+const { queue_send_email } = require("../../utils/bull-setup");
 const controller = {};
 
 controller.index = async (req, res, next) => {
@@ -21,6 +22,7 @@ controller.index = async (req, res, next) => {
     #swagger.summary = 'filter every campaign'
     #swagger.description = 'this for filter campaign using category fundraising'
     #swagger.parameters['q'] = { description: 'this for filter campaign using category fundraising' }
+    #swagger.parameters['l'] = { description: 'this for filter campaign using category fundraising' }
   */
     const query = req.query;
     const result = await CampaignModel.findAll({
@@ -75,6 +77,7 @@ controller.index = async (req, res, next) => {
           attributes: ["id", "nominal", ["createdAt", "date"]],
         },
       ],
+      limit: query.l ? query.l : 10,
     });
 
     return responseAPI.MethodResponse({
@@ -298,6 +301,33 @@ controller.createCampaignComment = async (req, res, next) => {
       res,
       method: methodConstant.POST,
       data: null,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+controller.historyPayment = async (req, res, next) => {
+  try {
+    /*
+    #swagger.security = [{
+      "bearerAuth": []
+    }]
+  */
+    /* 
+    #swagger.tags = ['CAMPAIGN']
+    #swagger.summary = 'history payment'
+    #swagger.description = 'get history payment when user donate campaign'
+  */
+    const data = await DonateCampaignModel.findAll({
+      where: { user_id: req.login.user_id },
+    });
+    console.log(req.login);
+
+    return responseAPI.MethodResponse({
+      res,
+      method: methodConstant.GET,
+      data: data,
     });
   } catch (err) {
     next(err);

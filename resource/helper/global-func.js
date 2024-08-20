@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const { UnauthenticatedError } = require("../utils/errors");
 const admin = require("firebase-admin");
 const serviceKey = require("../../serviceAccount.json");
+const fs = require("fs");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceKey),
@@ -34,20 +35,21 @@ const globalFunc = {};
  * | don't worry this very secret, just you and me
  * |
  */
-globalFunc.sendEmail = async ({ template, payload, receive, subject }) => {
-  // Get template email from html file
-  const tempFile = fs.readFileSync(
-    `resource/app/templates/html/${template}.html`,
-    "utf-8",
-  );
-
+globalFunc.sendEmail = async ({ type, to }) => {
   // create instance email/config email
-  let message = {
+  const message = {
     from: ENV.emailSender,
-    to: receive,
-    subject,
-    html: Mustache.render(tempFile, payload),
+    to,
   };
+
+  // Get template email from html file
+  let tempFile;
+  if (type == "otp") {
+    tempFile = fs.readFileSync(`resource/templates/html/OTP.html`, "utf-8");
+    message.subject = "OTP verficaton";
+    message.html = Mustache.render(tempFile, "payload");
+  } else if (type == "forgot-password") {
+  }
 
   // send email
   return await transporter.sendMail(message);

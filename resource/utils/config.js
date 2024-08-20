@@ -22,6 +22,10 @@ const ENV = {
   saltPassword: process.env.SALT,
   firebaseDb: process.env.FAREBASE_DB_URL,
   fileImgPath: process.env.FILE_PATH,
+  redisHost: process.env.REDIS_HOST,
+  redisPort: process.env.REDIS_PORT,
+  redisPassword: process.env.REDIS_PASSWORD,
+  redisLogo: process.env.REDIS_LOGO_UI,
 };
 
 module.exports = ENV;

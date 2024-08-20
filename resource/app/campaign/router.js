@@ -18,6 +18,7 @@ router.get("/", controller.index);
 router.post("/comment", AuthorizeAnyAccess, controller.createCampaignComment);
 router.post("/donate", AuthorizeAnyAccess, controller.createUserDonateCampaign);
 router.use(AuthorizeUserLogin);
+router.get("/history-pay", controller.historyPayment);
 router.use(AuthorizeRoleAccess("Organizer"));
 router.post("/", controller.create);
 router.put("/:id", controller.update);

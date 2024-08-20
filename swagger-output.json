@@ -183,6 +183,12 @@
             "description": "this for filter campaign using category fundraising",
             "in": "query",
             "type": "string"
+          },
+          {
+            "name": "l",
+            "description": "this for filter campaign using category fundraising",
+            "in": "query",
+            "type": "string"
           }
         ],
         "responses": {
@@ -278,6 +284,32 @@
             "schema": {
               "$ref": "#/definitions/BodyDonateCampaignSchema"
             }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/campaign/history-pay": {
+      "get": {
+        "tags": [
+          "CAMPAIGN"
+        ],
+        "summary": "history payment",
+        "description": "get history payment when user donate campaign",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
