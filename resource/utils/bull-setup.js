@@ -2,8 +2,8 @@ const Queue = require("bull");
 const { redisHost, redisPort, password, redisPassword } = require("./config");
 const { ImagesModel } = require("../models/images");
 const { Op } = require("sequelize");
-const nodemailer = require("nodemailer");
 const { globalFunc } = require("../helper/global-func");
+const { msgConstant, msgTypeConstant } = require("./constanta");
 
 const redisConfig = {
   redis: {
@@ -49,4 +49,21 @@ queue_send_email.process(async (job) => {
   return Promise.resolve(info.messageId);
 });
 
-module.exports = { cron_clean_images, queue_send_email };
+// EMAIL
+// Membuat queue baru untuk email
+const queue_push_notif = new Queue("Push notification", redisConfig);
+queue_push_notif.process(async (job) => {
+  const { type, tokens, msgTypeFCM } = job.data;
+
+  if (msgTypeFCM === msgTypeConstant.BROADCAST) {
+  } else {
+    await globalFunc.sendSingleNotification({ type, token: tokens });
+  }
+
+  return Promise.resolve();
+});
+queue_push_notif.on("failed", (job, err) => {
+  console.error(`Job failed with error ${err.message}`);
+});
+
+module.exports = { cron_clean_images, queue_send_email, queue_push_notif };

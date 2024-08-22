@@ -7,6 +7,7 @@ const { UnauthenticatedError } = require("../utils/errors");
 const admin = require("firebase-admin");
 const serviceKey = require("../../serviceAccount.json");
 const fs = require("fs");
+const { msgConstant } = require("../utils/constanta");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceKey),
@@ -213,45 +214,47 @@ globalFunc.sayThanks = () => {
   return word[((Math.random() * 100) / word.length).toFixed(0)];
 };
 
-globalFunc.sendSingleNotification = async ({ token, title, body }) => {
+globalFunc.sendSingleNotification = async ({ token, type }) => {
   const message = {
     token,
-    notification: {
-      title,
-      body,
-    },
+    notification: {},
     android: {
       notification: {
         icon: "ic_notification",
       },
     },
-    data: {
-      id: "12345",
-      click_action: "FLUTTER_NOTIFICATION_CLICK",
-    },
   };
+
+  if (type === msgConstant.PAYMENT_SUCCESS) {
+    message.notification.title = "Pembayaran berhasil 🎉";
+    message.notification.body = globalFunc.sayThanks();
+    // message.data = {
+    //   id: "12345",
+    //   click_action: "FLUTTER_NOTIFICATION_CLICK",
+    // };
+  }
 
   await admin.messaging().send(message);
 };
-globalFunc.sendMultiNotification = async ({ tokens, title, body }) => {
-  const message = {
-    tokens,
-    notification: {
-      title,
-      body,
-    },
-    android: {
-      notification: {
-        icon: "ic_notification",
-      },
-    },
-    data: {
-      id: "12345",
-      click_action: "FLUTTER_NOTIFICATION_CLICK",
-    },
-  };
+// globalFunc.sendMultiNotification = async ({ tokens, title, body }) => {
+//   const message = {
+//     tokens,
+//     notification: {
+//       title,
+//       body,
+//     },
+//     android: {
+//       notification: {
+//         icon: "ic_notification",
+//       },
+//     },
+//     data: {
+//       id: "12345",
+//       click_action: "FLUTTER_NOTIFICATION_CLICK",
+//     },
+//   };
 
-  await admin.messaging().send(message);
-};
+//   await admin.messaging().send(message);
+// };
 
 module.exports = { globalFunc, verifyJwtToken };

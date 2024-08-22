@@ -9,10 +9,18 @@ const { DonateCommentsModel } = require("../../models/donate_comments");
 const { ImagesModel } = require("../../models/images");
 const { OrganizerModel } = require("../../models/organizer");
 const { PaymentBankModel } = require("../../models/payment_bank");
-const { methodConstant } = require("../../utils/constanta");
+const {
+  methodConstant,
+  msgConstant,
+  msgTypeConstant,
+} = require("../../utils/constanta");
 const { NotFoundError } = require("../../utils/errors");
 const responseAPI = require("../../utils/response");
-const { queue_send_email } = require("../../utils/bull-setup");
+const {
+  queue_send_email,
+  queue_push_notif,
+} = require("../../utils/bull-setup");
+const { types } = require("pg");
 const controller = {};
 
 controller.index = async (req, res, next) => {
@@ -63,6 +71,12 @@ controller.index = async (req, res, next) => {
           model: OrganizerModel,
           attributes: ["id", "name", "verified"],
           where: { verified: true },
+          include: [
+            {
+              model: ImagesModel,
+              attributes: ["id", "link_url"],
+            },
+          ],
         },
         {
           model: ImagesModel,
@@ -257,9 +271,24 @@ controller.createUserDonateCampaign = async (req, res, next) => {
         },
         { transaction },
       ),
+      await OrganizerModel.increment(
+        "wallet_donate",
+        {
+          by: payload.nominal,
+          where: { id: payload.organizer_id },
+        },
+        { transaction },
+      ),
     ]);
 
     await transaction.commit();
+
+    queue_push_notif.add({
+      msgTypeFCM: msgTypeConstant.SINGLE,
+      type: msgConstant.PAYMENT_SUCCESS,
+      tokens:
+        "ctkCP-6tSoqccHjKP8uWOx:APA91bHjtPTwNKu79FWpkoRO_1gNzPaU0-rsD_9Z54oT4E8QkBLiLju7UrspbDE7LdqpnrXfAtrMLQ4n7nmCtVTE068-0X-jMEvn9FRuzt71o84i1gM9oBl6lFeoZBVqy9V2wrCsRBLn",
+    });
 
     return responseAPI.MethodResponse({
       res,
@@ -322,7 +351,6 @@ controller.historyPayment = async (req, res, next) => {
     const data = await DonateCampaignModel.findAll({
       where: { user_id: req.login.user_id },
     });
-    console.log(req.login);
 
     return responseAPI.MethodResponse({
       res,

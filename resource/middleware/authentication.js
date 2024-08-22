@@ -27,7 +27,7 @@ const AuthorizeUserLogin = async (req, res, next) => {
     const [verifyData, dataOrganizer] = await Promise.all([
       await AuthUserModel.findOne({
         where: { email: dataValid.email },
-        attributes: ["id", "username", "device_token"],
+        attributes: ["id", "username", "device_token", "email"],
         include: {
           model: RolesModel,
           attributes: ["role_name"],
@@ -53,11 +53,13 @@ const AuthorizeUserLogin = async (req, res, next) => {
     req.login = {
       user_id: verifyData.id,
       username: verifyData.username,
+      email: verifyData.email,
       device_token: verifyData.device_token,
       organizer_id: !dataOrganizer ? null : dataOrganizer.id,
-      ...dataValid,
       ...verifyData.role.toJSON(),
     };
+
+    console.log(req.login);
 
     // next to controller
     next();
@@ -107,6 +109,7 @@ const AuthorizeAnyAccess = async (req, res, next) => {
       delete dataValid.exp;
       delete dataValid.jti;
 
+      console.log(object);
       req.login = {
         user_id: verifyData.id,
         username: verifyData.username,

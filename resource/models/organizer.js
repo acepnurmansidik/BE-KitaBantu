@@ -14,6 +14,11 @@ const OrganizerModelDefine = {
     allowNull: false,
     defaultValue: "jl.raya kampung rambutan",
   },
+  wallet_donate: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 0,
+  },
   contact_person: {
     type: DataTypes.STRING,
     allowNull: false,

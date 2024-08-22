@@ -1,6 +1,7 @@
 const { DataTypes } = require("sequelize");
 const DBConn = require("../../db");
 const { CampaignModel } = require("./campaign");
+const { OrganizerModel } = require("./organizer");
 
 const ImagesModelDefine = {
   link_url: {
@@ -28,6 +29,9 @@ const ImagesModel = DBConn.define("images", ImagesModelDefine, {
 
 ImagesModel.belongsTo(CampaignModel, { foreignKey: "ref_id" });
 CampaignModel.hasMany(ImagesModel, { foreignKey: "ref_id" });
+
+ImagesModel.belongsTo(OrganizerModel, { foreignKey: "ref_id" });
+OrganizerModel.hasOne(ImagesModel, { foreignKey: "ref_id" });
 
 Object.keys(ImagesModelDefine).map((item) => {
   ImagesModelDefine[item] = ImagesModelDefine[item]["defaultValue"]
