@@ -3,13 +3,17 @@ const { redisHost, redisPort, password, redisPassword } = require("./config");
 const { ImagesModel } = require("../models/images");
 const { Op } = require("sequelize");
 const { globalFunc } = require("../helper/global-func");
-const { msgConstant, msgTypeConstant } = require("./constanta");
+const { msgTypeConstant } = require("./constanta");
 
 const redisConfig = {
   redis: {
     host: redisHost,
     port: redisPort,
     password: redisPassword,
+    tls: true,
+    enableTLSForSentinelMode: false,
+    maxRetriesPerRequest: null,
+    enableReadyCheck: false,
   },
 };
 

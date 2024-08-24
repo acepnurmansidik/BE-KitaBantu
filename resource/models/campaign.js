@@ -15,6 +15,10 @@ const CampaignModelDefine = {
     unique: true,
     defaultValue: "peduli lingkunagan yang bersih",
   },
+  tagline: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   amount_require: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -25,6 +29,11 @@ const CampaignModelDefine = {
     allowNull: false,
     defaultValue:
       "lingkunngan hidup yang sehat diperlukan untuk keberlangsungan hidup makhluk hidup",
+  },
+  fast_help:{
+    type: DataTypes.BOOLEAN,
+    allowNull:false,
+    defaultValue: false
   },
   start_date: {
     type: DataTypes.DATE,

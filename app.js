@@ -4,10 +4,10 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
 const helmet = require("helmet");
-const { cron_clean_images } = require("./resource/utils/bull-setup");
-const { createBullBoard } = require("@bull-board/api");
-const { BullAdapter } = require("@bull-board/api/bullAdapter");
-const { ExpressAdapter } = require("@bull-board/express");
+// const { cron_clean_images } = require("./resource/utils/bull-setup");
+// const { createBullBoard } = require("@bull-board/api");
+// const { BullAdapter } = require("@bull-board/api/bullAdapter");
+// const { ExpressAdapter } = require("@bull-board/express");
 
 const indexRouter = require("./routes/index");
 const notFoundMiddleware = require("./resource/middleware/not-found");
@@ -19,39 +19,19 @@ const swaggerDocument = require("./swagger-output.json"); //
 const { redisLogo } = require("./resource/utils/config");
 
 // Redis
-const serverAdapter = new ExpressAdapter();
-serverAdapter.setBasePath("/admin/queues");
+// const serverAdapter = new ExpressAdapter();
+// serverAdapter.setBasePath("/admin/queues");
 
-const { addQueue, removeQueue, setQueues, replaceQueues } = createBullBoard({
-  queues: [new BullAdapter(cron_clean_images)],
-  serverAdapter: serverAdapter,
-  options: {
-    uiConfig: {
-      boardTitle: "KitaBantu",
-      boardLogo: {
-        path: redisLogo,
-        width: "75px",
-        height: 75,
-      },
-      miscLinks: [{ text: "Logout", url: "/logout" }],
-      favIcon: {
-        default: "static/images/logo.svg",
-        alternative: "static/favicon-32x32.png",
-      },
-    },
-  },
-});
-
-// createBullBoard({
-//   queues: [new BullAdapter(cronJobQueue)],
-//   serverAdapter,
+// const { addQueue, removeQueue, setQueues, replaceQueues } = createBullBoard({
+//   queues: [new BullAdapter(cron_clean_images)],
+//   serverAdapter: serverAdapter,
 //   options: {
 //     uiConfig: {
-//       boardTitle: "My BOARD",
+//       boardTitle: "KitaBantu",
 //       boardLogo: {
-//         path: "https://firebasestorage.googleapis.com/v0/b/trackmoney-af0db.appspot.com/o/icons%2Fmore.png?alt=media&token=75016435-e25f-4629-aef1-ce5ed3793eae",
-//         width: "100px",
-//         height: 200,
+//         path: redisLogo,
+//         width: "75px",
+//         height: 75,
 //       },
 //       miscLinks: [{ text: "Logout", url: "/logout" }],
 //       favIcon: {
@@ -63,7 +43,7 @@ const { addQueue, removeQueue, setQueues, replaceQueues } = createBullBoard({
 // });
 
 const app = express();
-app.use("/admin/queues", serverAdapter.getRouter());
+// app.use("/admin/queues", serverAdapter.getRouter());
 
 app.use(cors());
 app.use(helmet());

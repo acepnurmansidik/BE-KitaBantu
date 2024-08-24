@@ -170,6 +170,107 @@
         ]
       }
     },
+    "/api/v1/banner/": {
+      "get": {
+        "tags": [
+          "BANNER"
+        ],
+        "summary": "filter every campaign",
+        "description": "this for filter campaign using category fundraising",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "BANNER"
+        ],
+        "summary": "filter every campaign",
+        "description": "this for filter campaign using category fundraising",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Create role",
+            "schema": {
+              "$ref": "#/definitions/BodyBannerSchema"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/banner/{id}": {
+      "put": {
+        "tags": [
+          "BANNER"
+        ],
+        "summary": "filter every campaign",
+        "description": "this for filter campaign using category fundraising",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Create role",
+            "schema": {
+              "$ref": "#/definitions/BodyBannerSchema"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "BANNER"
+        ],
+        "summary": "filter every campaign",
+        "description": "this for filter campaign using category fundraising",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/api/v1/campaign/": {
       "get": {
         "tags": [
@@ -179,13 +280,25 @@
         "description": "this for filter campaign using category fundraising",
         "parameters": [
           {
-            "name": "q",
+            "name": "slug",
             "description": "this for filter campaign using category fundraising",
             "in": "query",
             "type": "string"
           },
           {
-            "name": "l",
+            "name": "fast_help",
+            "description": "this for filter campaign using category fundraising",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "description": "this for filter campaign using category fundraising",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "page",
             "description": "this for filter campaign using category fundraising",
             "in": "query",
             "type": "string"
@@ -1016,11 +1129,13 @@
           "type": "string",
           "example": "peduli lingkunagan yang bersih"
         },
+        "tagline": {},
         "amount_require": {},
         "description": {
           "type": "string",
           "example": "lingkunngan hidup yang sehat diperlukan untuk keberlangsungan hidup makhluk hidup"
         },
+        "fast_help": {},
         "start_date": {
           "type": "string",
           "example": "2024-08-11T13:58:41.224Z"
@@ -1123,6 +1238,19 @@
         "status": {
           "type": "boolean",
           "example": true
+        }
+      }
+    },
+    "BodyBannerSchema": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "example": "this banner"
+        },
+        "image": {
+          "type": "string",
+          "example": ""
         }
       }
     },

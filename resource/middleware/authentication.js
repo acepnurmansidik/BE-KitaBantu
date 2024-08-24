@@ -2,11 +2,7 @@ const { verifyJwtToken } = require("../helper/global-func");
 const { AuthUserModel } = require("../models/auth");
 const { OrganizerModel } = require("../models/organizer");
 const { RolesModel } = require("../models/roles");
-const {
-  UnauthenticatedError,
-  BadRequestError,
-  UnauthorizedError,
-} = require("../utils/errors");
+const { UnauthenticatedError, UnauthorizedError } = require("../utils/errors");
 const NotFound = require("../utils/errors/not-found");
 
 const AuthorizeUserLogin = async (req, res, next) => {
@@ -58,8 +54,6 @@ const AuthorizeUserLogin = async (req, res, next) => {
       organizer_id: !dataOrganizer ? null : dataOrganizer.id,
       ...verifyData.role.toJSON(),
     };
-
-    console.log(req.login);
 
     // next to controller
     next();

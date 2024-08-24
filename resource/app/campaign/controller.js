@@ -17,7 +17,7 @@ const {
 } = require("../../utils/constanta");
 const { NotFoundError } = require("../../utils/errors");
 const responseAPI = require("../../utils/response");
-const { queue_push_notif, queue_send_email } = require("../../utils/bull-setup");
+const { queue_push_notif } = require("../../utils/bull-setup");
 const controller = {};
 
 controller.index = async (req, res, next) => {
@@ -26,11 +26,15 @@ controller.index = async (req, res, next) => {
     #swagger.tags = ['CAMPAIGN']
     #swagger.summary = 'filter every campaign'
     #swagger.description = 'this for filter campaign using category fundraising'
-    #swagger.parameters['q'] = { description: 'this for filter campaign using category fundraising' }
-    #swagger.parameters['l'] = { description: 'this for filter campaign using category fundraising' }
+    #swagger.parameters['slug'] = { description: 'this for filter campaign using category fundraising' }
+    #swagger.parameters['fast_help'] = { description: 'this for filter campaign using category fundraising' }
+    #swagger.parameters['limit'] = { description: 'this for filter campaign using category fundraising' }
+    #swagger.parameters['page'] = { description: 'this for filter campaign using category fundraising' }
   */
-    const query = req.query;
+    const { limit, slug, page, fast_help } = req.query;
+    const offset = (page - 1) * limit;
     const result = await CampaignModel.findAll({
+      where: { fast_help },
       attributes: {
         include: [
           [
@@ -60,7 +64,7 @@ controller.index = async (req, res, next) => {
           attributes: ["id", "name", "slug"],
           where: {
             slug: {
-              [Op.iLike]: `%${query.q ? query.q : ""}%`,
+              [Op.iLike]: `%${slug ? slug : ""}%`,
             },
           },
         },
@@ -88,14 +92,9 @@ controller.index = async (req, res, next) => {
           attributes: ["id", "nominal", ["createdAt", "date"]],
         },
       ],
-      limit: query.l ? query.l : 10,
+      limit: limit ? limit : 10,
+      offset,
     });
-
-    queue_send_email.add({
-      type:emailConstant.OTP,
-      to:"acepnurmansidik@gmail.com",
-      payload:{otp:86785,username:2342}
-    })
 
     return responseAPI.MethodResponse({
       res,
@@ -193,6 +192,15 @@ controller.update = async (req, res, next) => {
       await ImagesModel.update(
         { status: false },
         { where: { id: { [Op.notIn]: list_image }, ref_id: id } },
+        { transaction },
+      ),
+      await DonateCampaignModel.update(
+        {
+          campaign_name: payload.campaign_name,
+          slug_name: payload.slug_name,
+          amount: payload.amount_require,
+          description: payload.description,
+        },
         { transaction },
       ),
     ]);
