@@ -13,14 +13,11 @@ const {
   methodConstant,
   msgConstant,
   msgTypeConstant,
+  emailConstant,
 } = require("../../utils/constanta");
 const { NotFoundError } = require("../../utils/errors");
 const responseAPI = require("../../utils/response");
-const {
-  queue_send_email,
-  queue_push_notif,
-} = require("../../utils/bull-setup");
-const { types } = require("pg");
+const { queue_push_notif, queue_send_email } = require("../../utils/bull-setup");
 const controller = {};
 
 controller.index = async (req, res, next) => {
@@ -93,6 +90,12 @@ controller.index = async (req, res, next) => {
       ],
       limit: query.l ? query.l : 10,
     });
+
+    queue_send_email.add({
+      type:emailConstant.OTP,
+      to:"acepnurmansidik@gmail.com",
+      payload:{otp:86785,username:2342}
+    })
 
     return responseAPI.MethodResponse({
       res,

@@ -7,7 +7,7 @@ const { UnauthenticatedError } = require("../utils/errors");
 const admin = require("firebase-admin");
 const serviceKey = require("../../serviceAccount.json");
 const fs = require("fs");
-const { msgConstant } = require("../utils/constanta");
+const { msgConstant, emailConstant } = require("../utils/constanta");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceKey),
@@ -36,7 +36,7 @@ const globalFunc = {};
  * | don't worry this very secret, just you and me
  * |
  */
-globalFunc.sendEmail = async ({ type, to }) => {
+globalFunc.sendEmail = async ({ type, to , payload }) => {
   // create instance email/config email
   const message = {
     from: ENV.emailSender,
@@ -44,16 +44,31 @@ globalFunc.sendEmail = async ({ type, to }) => {
   };
 
   // Get template email from html file
-  let tempFile;
-  if (type == "otp") {
-    tempFile = fs.readFileSync(`resource/templates/html/OTP.html`, "utf-8");
-    message.subject = "OTP verficaton";
-    message.html = Mustache.render(tempFile, "payload");
-  } else if (type == "forgot-password") {
-  }
+  let filename;
+  if (type == emailConstant.OTP) {
+    filename = "OTP";
+    message.subject = "Kode OTP untuk Verifikasi Akun Anda";
+  } else if (type == emailConstant.FORGOT_PASSWORD) {
+    filename = "FORGOT_PASSWORD";
+    message.subject = "Reset Password Anda";
+  } else if (type == emailConstant.VERIFIKASI_EMAIL) {
+    filename = "VERIFIKASI_EMAIL";
+    message.subject = "Tautan Verifikasi Email Anda";
+  } 
+
+  let tempFile = fs.readFileSync(
+    `resource/templates/html/${filename}.html`,
+    "utf-8",
+  );
+
+  message.html = Mustache.render(tempFile, payload);
 
   // send email
-  return await transporter.sendMail(message);
+  try {
+    await transporter.sendMail(message);
+  } catch (err) {
+    console.error(err.message);
+  }
 };
 
 /**

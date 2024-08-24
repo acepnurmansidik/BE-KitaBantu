@@ -42,9 +42,9 @@ cron_clean_images.on("failed", (job, err) => {
 // Membuat queue baru untuk email
 const queue_send_email = new Queue("Send Email", redisConfig);
 queue_send_email.process(async (job) => {
-  const { type, to } = job.data;
+  const { type, to, payload } = job.data;
 
-  const info = globalFunc.sendEmail({ type, to });
+  const info = globalFunc.sendEmail({ type, to, payload });
 
   return Promise.resolve(info.messageId);
 });

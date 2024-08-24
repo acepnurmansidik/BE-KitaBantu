@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Konfirmasi OTP</title>
-    <style>
+        <style>
         body {
             font-family: Arial, sans-serif;
             color: #333;
@@ -12,6 +11,7 @@
             margin: 0;
             padding: 0;
         }
+        .verify-button { display: inline-block; padding: 10px 20px; font-size: 16px; color: #fff; background: #4CAF50; text-decoration: none; border-radius: 4px; }
         .container {
             width: 90%;
             max-width: 600px;
@@ -95,11 +95,9 @@
         <div class="content">
             <div class="section">
                 <p>Halo {{username}},</p>
-                <p>Terima kasih telah melakukan permintaan OTP. Berikut adalah kode OTP Anda:</p>
-                <div class="otp-code">
-                    {{otp}}
-                </div>
-                <p>Kode OTP ini berlaku untuk 10 menit ke depan. Jika Anda tidak melakukan permintaan ini, harap abaikan email ini.</p>
+                <p>Terima kasih telah mendaftar di KitaBantu. Untuk mengaktifkan akun Anda, silakan klik tautan berikut untuk memverifikasi alamat email Anda:</p>
+                <a href="https://www.example.com/verify-email?token=unique-token" class="verify-button">Verifikasi Email</a>
+                <p>Jika Anda tidak mendaftar untuk akun ini, Anda dapat mengabaikan email ini.</p>
             </div>
         </div>
         <hr>
