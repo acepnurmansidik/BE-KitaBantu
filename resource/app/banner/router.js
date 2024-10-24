@@ -1,6 +1,9 @@
 const express = require("express");
 const controller = require("./controller");
-const { AuthorizeRoleAccess } = require("../../middleware/authentication");
+const {
+  AuthorizeRoleAccess,
+  AuthorizeUserLogin,
+} = require("../../middleware/authentication");
 const router = express.Router();
 
 /**
@@ -12,6 +15,8 @@ const router = express.Router();
  */
 // router.use(AuthorizeRoleAccess("Ultramen"));
 router.get("/", controller.index);
+router.use(AuthorizeUserLogin);
+router.use(AuthorizeRoleAccess("Ultramen"));
 router.post("/", controller.create);
 router.put("/:id", controller.update);
 router.delete("/:id", controller.destroy);

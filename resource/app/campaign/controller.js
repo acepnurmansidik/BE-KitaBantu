@@ -263,21 +263,22 @@ controller.createUserDonateCampaign = async (req, res, next) => {
       schema: { $ref: '#/definitions/BodyDonateCampaignSchema' }
     }
   */
-    const { bank, comment, ...payload } = req.body;
+    let { bank, comment, ...payload } = req.body;
     if (req.login) payload.user_id = req.login?.user_id;
+    if ([typeof bank, typeof comment].includes("string")) {
+      bank = JSON.parse(bank);
+      comment = JSON.parse(comment);
+    }
 
     const result = await DonateCampaignModel.create(payload, { transaction });
     await Promise.all([
       await PaymentBankModel.create(
-        { ...JSON.parse(bank), donate_campaign_id: result.id },
+        { ...bank, donate_campaign_id: result.id },
         { transaction },
       ),
       await DonateCommentsModel.create(
         {
-          comment: JSON.parse(comment).comment,
-          name: req.login?.username
-            ? req.login?.username
-            : JSON.parse(comment).name,
+          ...comment,
           donate_campaign_id: result.id,
         },
         { transaction },
@@ -304,7 +305,7 @@ controller.createUserDonateCampaign = async (req, res, next) => {
     return responseAPI.MethodResponse({
       res,
       method: methodConstant.POST,
-      data: result,
+      data: null,
     });
   } catch (err) {
     await transaction.rollback();

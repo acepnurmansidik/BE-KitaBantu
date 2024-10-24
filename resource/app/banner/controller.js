@@ -8,11 +8,6 @@ const controller = {};
 
 controller.index = async (req, res, next) => {
   try {
-    /*
-      #swagger.security = [{
-        "bearerAuth": []
-      }]
-    */
     /* 
       #swagger.tags = ['BANNER']
       #swagger.summary = 'filter every campaign'
@@ -40,6 +35,11 @@ controller.index = async (req, res, next) => {
 controller.create = async (req, res, next) => {
   const transaction = await DBConn.transaction();
   try {
+    /*
+      #swagger.security = [{
+        "bearerAuth": []
+      }]
+    */
     /* 
     #swagger.tags = ['BANNER']
     #swagger.summary = 'filter every campaign'
@@ -77,10 +77,10 @@ controller.update = async (req, res, next) => {
   const transaction = await DBConn.transaction();
   try {
     /*
-        #swagger.security = [{
-          "bearerAuth": []
-        }]
-      */
+      #swagger.security = [{
+        "bearerAuth": []
+      }]
+    */
     /* 
     #swagger.tags = ['BANNER']
     #swagger.summary = 'filter every campaign'
@@ -130,10 +130,10 @@ controller.update = async (req, res, next) => {
 controller.destroy = async (req, res, next) => {
   try {
     /*
-        #swagger.security = [{
-          "bearerAuth": []
-        }]
-      */
+      #swagger.security = [{
+        "bearerAuth": []
+      }]
+    */
     /* 
     #swagger.tags = ['BANNER']
     #swagger.summary = 'filter every campaign'

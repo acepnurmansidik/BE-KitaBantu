@@ -13,6 +13,7 @@ const DonateCommentsModelDefine = {
   },
   date: {
     type: DataTypes.DATE,
+    defaultValue: Date.now(),
   },
   donate_campaign_id: {
     type: DataTypes.UUID,

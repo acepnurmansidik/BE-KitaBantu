@@ -103,7 +103,6 @@ const AuthorizeAnyAccess = async (req, res, next) => {
       delete dataValid.exp;
       delete dataValid.jti;
 
-      console.log(object);
       req.login = {
         user_id: verifyData.id,
         username: verifyData.username,
